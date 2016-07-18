@@ -37,6 +37,7 @@ The filter is inserted first in the chain (the first `<filter>` element):
         <param-name>BanDuration</param-name>
         <param-value>60</param-value>
     </init-param>
+    <init-param>
         <!-- Amount of time in seconds before now to track previous requests -->
         <param-name>TrackingInterval</param-name>
         <param-value>10</param-value>
