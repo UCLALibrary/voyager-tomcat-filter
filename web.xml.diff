@@ -1,35 +1,33 @@
-237a238,241
+237a238,261
 >     <!-- 2014-08-12 akohler: Custom UCLA filter to block aggressive record harvesters.
->          IP addresses requesting more than RequestsAllowed records in TrackingInterval
-> 	 seconds will be banned (receive HTTP 403) for BanDuration seconds.
+>      IP addresses requesting more than RequestsAllowed records in TrackingInterval
+>      seconds will be banned (receive HTTP 403) for BanDuration seconds.
 >     -->
-238a243,262
+>     <filter>
 >         <filter-name>BBID Harvest Filter</filter-name>
 >         <filter-class>edu.ucla.library.libservices.tomcat.filters.BbidHarvestFilter</filter-class>
-> 	<init-param>
-> 	    <!-- Number of requests allowed during TrackingInterval -->
-> 	    <param-name>RequestsAllowed</param-name>
-> 	    <param-value>20</param-value>
-> 	</init-param>
-> 	<init-param>
-> 	    <!-- Seconds to ban IP addresses which exceed RequestsAllowed -->
-> 	    <param-name>BanDuration</param-name>
-> 	    <param-value>60</param-value>
-> 	</init-param>
-> 	<init-param>
-> 	    <!-- Amount of time in seconds before now to track previous requests -->
-> 	    <param-name>TrackingInterval</param-name>
-> 	    <param-value>10</param-value>
-> 	</init-param>
+>         <init-param>
+>             <!-- Number of requests allowed during TrackingInterval -->
+>             <param-name>RequestsAllowed</param-name>
+>             <param-value>20</param-value>
+>         </init-param>
+>         <init-param>
+>             <!-- Seconds to ban IP addresses which exceed RequestsAllowed -->
+>             <param-name>BanDuration</param-name>
+>             <param-value>60</param-value>
+>         </init-param>
+>         <init-param>
+>             <!-- Amount of time in seconds before now to track previous requests -->
+>             <param-name>TrackingInterval</param-name>
+>             <param-value>10</param-value>
+>         </init-param>
 >     </filter>
 > 
->     <filter>
-500a525
+532a557,563
 >     <!-- 2014-08-12 akohler: Custom UCLA filter to block aggressive record harvesters -->
-501a527,532
+>     <filter-mapping>
 >         <filter-name>BBID Harvest Filter</filter-name>
 >         <url-pattern>/holdingsInfo/*</url-pattern>
 >         <url-pattern>/staffView/*</url-pattern>
 >     </filter-mapping>
 > 
->     <filter-mapping>
