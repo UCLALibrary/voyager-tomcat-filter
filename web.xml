@@ -1,0 +1,4305 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- $Revision: 1.30.6.1 $ $Date: 2015/01/16 18:04:40 $ -->
+<!--
+#(c)#=====================================================================
+#(c)#
+#(c)#       Copyright 2007-2013 Ex Libris (USA) Inc.
+#(c)#                       All Rights Reserved
+#(c)#
+#(c)#=====================================================================
+-->
+
+<web-app xmlns="http://java.sun.com/xml/ns/javaee"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+                      http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+  version="3.0">
+
+    <display-name>Voyager WebVoyage Application</display-name>
+    <description> This file defines the Voyager WebVoyage application.
+
+        The database must be configured in the Context for this web application,
+        although references to it are defined below.
+
+        Change xxxdb to the actual name of the database.
+
+        Change the value of Config to the actual full path.
+    </description>
+
+    <context-param>
+        <description>
+            The root location of the XSL templates and properties files in this application.
+        </description>
+        <param-name>UIRootDir</param-name>
+        <param-value>ui</param-value>
+    </context-param>
+
+    <context-param>
+        <description>
+            The root location of the ini and properties files in this application.
+        </description>
+        <param-name>IniRootDir</param-name>
+        <param-value>ini</param-value>
+    </context-param>
+
+    <context-param>
+        <description>
+            The host of the voyager XServices.
+        </description>
+        <param-name>XServiceHost</param-name>
+        <param-value>localhost</param-value>
+    </context-param>
+
+    <context-param>
+        <description>
+            The port at which voyager XServices can be found
+        </description>
+        <param-name>XServicePort</param-name>
+        <param-value>7014</param-value>
+    </context-param>
+
+    <context-param>
+        <description>
+        The amount of time in seconds to wait for VXWS to respond.
+        </description>
+        <param-name>XService-VXWSConnectTimeout</param-name>
+        <param-value>120</param-value>
+    </context-param>
+
+    <context-param>
+        <description>
+        The amount of time in seconds to wait before retrying to connect to VXWS
+        </description>
+        <param-name>XService-VXWSConnectRetryInterval</param-name>
+        <param-value>15</param-value>
+    </context-param>
+
+
+    <context-param>
+        <description>
+            The name of the properties file that defines messages for web service return codes.
+        </description>
+        <param-name>MessagesPropertiesFile</param-name>
+        <param-value>messages.properties</param-value>
+    </context-param>
+
+    <context-param>
+        <description>
+            The name of the properties file that defines messages for web service return codes.
+        </description>
+        <param-name>MyAccountPropertiesFile</param-name>
+        <param-value>myaccount.properties</param-value>
+    </context-param>
+
+    <context-param>
+        <description>
+            The base URL to reach WebVoyage online help.  The param-value must end with
+            a slash (/).  The string %SKIN%, if it exists, will be replaced with the skin
+            in use at the time a web page is created.
+        </description>
+        <param-name>HelpURL</param-name>
+        <param-value>ui/%SKIN%/htdocs/help/</param-value>
+    </context-param>
+
+    <context-param>
+        <description>
+            The default help page.  If a page servlet has an init-param HelpPage defined,
+            the help links on the page created by that servlet will use that value in
+            creating a URL.  If there is no HelpPage, this DefaultHelpPage will be used
+            instead.
+        </description>
+        <param-name>DefaultHelpPage</param-name>
+        <param-value>index.html</param-value>
+    </context-param>
+
+    <context-param>
+        <description>
+            Option to enable caching contents of *.properties and *.xsl files.
+            If set to Y, then the the properties and stylesheet files will be read from
+            disk the first time they are needed, and any changes made to the files will
+            not be picked up until tomcat is restarted.
+            Default is not to cache.
+        </description>
+        <param-name>UsePropertiesCache</param-name>
+        <param-value>N</param-value>
+    </context-param>
+
+    <!-- These context-params are used for mapping search types to search definition
+        pages internally for WebVoyage.  Behavior is undefined if these are changed.
+        The values must match page servlet names.
+     -->
+    <context-param>
+        <param-name>QUICK</param-name>
+        <param-value>SearchBasicServlet</param-value>
+    </context-param>
+    <context-param>
+        <param-name>BASIC</param-name>
+        <param-value>SearchBasicServlet</param-value>
+    </context-param>
+    <context-param>
+        <param-name>ADVANCED</param-name>
+        <param-value>SearchAdvancedServlet</param-value>
+    </context-param>
+    <context-param>
+        <param-name>SUBJECT</param-name>
+        <param-value>SearchSubjectServlet</param-value>
+    </context-param>
+    <context-param>
+        <param-name>AUTHOR</param-name>
+        <param-value>SearchAuthorServlet</param-value>
+    </context-param>
+    <context-param>
+        <param-name>COURSERESERVE</param-name>
+        <param-value>SearchCourseReserveDataServlet</param-value>
+    </context-param>
+    <context-param>
+        <param-name>MAP</param-name>
+        <param-value>SearchMapServlet</param-value>
+    </context-param>
+    <context-param>
+        <param-name>B4H</param-name>
+        <param-value>none</param-value>
+    </context-param>
+    <context-param>
+        <param-name>MAP_CORRIDOR</param-name>
+        <param-value>CorridorSearchServlet</param-value>
+    </context-param>
+    <context-param>
+        <param-name>MAP_POLYGON</param-name>
+        <param-value>PolygonSearchServlet</param-value>
+    </context-param>
+    <context-param>
+        <param-name>MAP_RADIUS</param-name>
+        <param-value>RadiusSearchServlet</param-value>
+    </context-param>
+    <context-param>
+        <param-name>MAP_RANGE</param-name>
+        <param-value>RangeSearchServlet</param-value>
+    </context-param>
+    <context-param>
+        <param-name>MAP_RECTANGLE</param-name>
+        <param-value>RectangleSearchServlet</param-value>
+    </context-param>
+    <context-param>
+        <param-name>RELATED_BIB</param-name>
+        <param-value>none</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>LOGIN_ACTION</param-name>
+        <param-value>LoginAction</param-value>
+    </context-param>
+
+    <context-param>
+        <description>
+            Flag to enable or disable PDS Support. (True / False)
+        </description>
+        <param-name>PDSEnabled</param-name>
+        <param-value>False</param-value>
+    </context-param>
+
+    <context-param>
+        <description>The host of the Patron Data Services.</description>
+        <param-name>PDSHost</param-name>
+        <param-value>CHANGE_ME_PDS_HOST</param-value>
+    </context-param>
+
+    <context-param>
+        <description>
+            The port at which Patron Data Services can be found
+        </description>
+        <param-name>PDSPort</param-name>
+        <param-value>8991</param-value>
+    </context-param>
+
+    <context-param>
+        <description>
+            The Institution "tab_service" which to operate under in PDS
+        </description>
+        <param-name>Institution</param-name>
+        <param-value>Voyager</param-value>
+    </context-param>
+
+    <!--
+        ##
+        ## Note: the filter, filter-mapping, servlet, and servlet-mapping elements must appear
+        ## in this web application deployment descriptor in this order.
+        ##
+    -->
+
+    <!--
+        ##########################
+        ###                    ###
+        ### Filter Definitions ###
+        ###                    ###
+        ##########################
+    -->
+
+    <filter>
+        <filter-name>HttpContext Filter</filter-name>
+        <filter-class>
+            com.endinfosys.util.HttpContextFilter
+        </filter-class>
+        <init-param>
+            <param-name>StoreContextIn</param-name>
+            <param-value>request</param-value>
+        </init-param>
+    </filter>
+
+    <filter>
+        <filter-name>Character Encoding Filter</filter-name>
+        <filter-class>com.endinfosys.util.CharacterEncodingFilter</filter-class>
+    </filter>
+
+    <filter>
+        <filter-name>VwebvSession Filter</filter-name>
+        <filter-class>
+            com.endinfosys.voyager.webvoyage.servlet.VwebvSessionFilter
+        </filter-class>
+    </filter>
+
+    <filter>
+        <filter-name>SelectSkin Filter</filter-name>
+        <filter-class>
+            com.endinfosys.voyager.webvoyage.servlet.SkinFilter
+        </filter-class>
+        <init-param>
+            <description>
+                The default skin (locale) to use in this application.
+                This value must exactly match (including case) one of
+                the ui subdirectory names.
+            </description>
+            <param-name>DefaultSkin</param-name>
+            <param-value>ucladb</param-value>
+        </init-param>
+    </filter>
+
+    <filter>
+        <filter-name>VoyConfig Filter</filter-name>
+        <filter-class>
+            com.endinfosys.voyager.webvoyage.servlet.VoyConfigFilter
+        </filter-class>
+    </filter>
+
+    <filter>
+        <filter-name>PDSLogout SSO Filter</filter-name>
+        <filter-class>
+            com.endinfosys.voyager.webvoyage.servlet.PDSLogoutSSOFilter
+        </filter-class>
+    </filter>
+
+    <filter>
+        <filter-name>PDSLoginFailure Filter</filter-name>
+        <filter-class>
+            com.endinfosys.voyager.webvoyage.servlet.PDSLoginFailureFilter
+        </filter-class>
+    </filter>
+
+    <filter>
+        <filter-name>PDSLogout Filter</filter-name>
+        <filter-class>
+            com.endinfosys.voyager.webvoyage.servlet.PDSLogoutFilter
+        </filter-class>
+    </filter>
+
+    <filter>
+        <filter-name>PDSLogin Filter</filter-name>
+        <filter-class>
+            com.endinfosys.voyager.webvoyage.servlet.PDSLoginFilter
+        </filter-class>
+    </filter>
+
+    <filter>
+        <filter-name>PDSAuthentication Filter</filter-name>
+        <filter-class>
+            com.endinfosys.voyager.webvoyage.servlet.PDSAuthenticationFilter
+        </filter-class>
+        <init-param>
+            <param-name>Institution</param-name>
+            <param-value>Voyager</param-value>
+        </init-param>
+    </filter>
+
+    <filter>
+        <filter-name>PDSForwardToLogin Filter</filter-name>
+        <filter-class>
+            com.endinfosys.voyager.webvoyage.servlet.PDSForwardToLoginFilter
+        </filter-class>
+    </filter>
+
+
+    <filter>
+        <filter-name>SearchBasic Filter</filter-name>
+        <filter-class>
+            com.endinfosys.voyager.webvoyage.servlet.SearchBasicFilter
+        </filter-class>
+        <init-param>
+            <param-name>Properties-Custom</param-name>
+            <param-value>webvoyage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>UIRootDir</param-name>
+            <param-value>ui</param-value>
+        </init-param>
+    </filter>
+
+
+
+    <filter>
+        <filter-name>Authentication Filter</filter-name>
+        <filter-class>
+            com.endinfosys.voyager.webvoyage.servlet.AuthenticationFilter
+        </filter-class>
+        <init-param>
+            <description>
+                The CreateURL is where to redirect requests that require a login,
+                so the authentication information may be created in the user's session.
+            </description>
+            <param-name>CreateURL</param-name>
+            <param-value>/vwebv/login</param-value>
+        </init-param>
+        <init-param>
+            <description>
+                ExternalAuthenticationOnly is an optional parameter, set
+                to "Y" to indicate that the CreateURL param is an
+                external authentication adaptor and that the WebVoyage
+                login screen is to be bypassed. However, if the
+                CreateURL param is the WebVoyage login screen, then this
+                param should be set to "N". Doing so still allows an
+                external authentication adaptor to be accessed from the
+                WebVoyage login screen.
+            </description>
+            <param-name>ExternalAuthenticationOnly</param-name>
+            <param-value>N</param-value>
+        </init-param>
+        <init-param>
+            <description>
+                The property file and skin file (see below) are used to check if a user specifies external
+                log in and to bypass the log in screen.
+                If so, try to redirect to the external log in screen instead of internal log in screen.
+            </description>
+            <param-name>Properties-Custom</param-name>
+            <param-value>webvoyage</param-value>
+        </init-param>
+        <init-param>
+            <description>
+                The skin file directory for the customized property file.
+            </description>
+            <param-name>UIRootDir</param-name>
+            <param-value>ui</param-value>
+        </init-param>
+    </filter>
+
+    <filter>
+        <description>
+            This filter ensures that all search services use clients that are
+            connected to each other, so we can maintain a stateful connection
+            all the way to the OPACSVR at the far back end.
+        </description>
+        <filter-name>SearchContextFilter</filter-name>
+        <filter-class>
+            com.endinfosys.voyager.webvoyage.servlet.SearchContextFilter
+        </filter-class>
+        <init-param>
+            <param-name>XService-Search</param-name>
+            <param-value>SearchService,com.endinfosys.voyager.webvoyage.xservice.SearchXService</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XService-Connections</param-name>
+            <param-value>SearchConnectionService,com.endinfosys.voyager.webvoyage.xservice.SearchConnectionXService</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XService-SearchResults</param-name>
+            <param-value>SearchResultsService,com.endinfosys.voyager.webvoyage.xservice.SearchResultsXService</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XService-SearchStatus</param-name>
+            <param-value>SearchStatusService</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XService-SearchStop</param-name>
+            <param-value>StopSearchService</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XService-SessionCleanup</param-name>
+            <param-value>SessionCleanupService</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XService-ReserveBrowse</param-name>
+            <param-value>ReserveBrowseService,com.endinfosys.voyager.webvoyage.xservice.ReserveBrowseXService</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XService-SearchProperties</param-name>
+            <param-value>SearchPropertiesService,com.endinfosys.voyager.webvoyage.xservice.SearchPropertiesXService</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XService-BibsForHeading</param-name>
+            <param-value>SearchBibsForHeadingService,com.endinfosys.voyager.webvoyage.xservice.BibsForHeadingXService</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XService-AuthorityInformation</param-name>
+            <param-value>GetAuthorityService,com.endinfosys.voyager.webvoyage.xservice.AuthorityInformationXService</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XService-HoldingsInformation</param-name>
+            <param-value>GetHoldingsService,com.endinfosys.voyager.webvoyage.xservice.HoldingsInformationXService</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XService-RelateBibCount</param-name>
+            <param-value>RelatedBibCountService,com.endinfosys.voyager.webvoyage.xservice.RelatedBibCountXService</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XService-Login</param-name>
+            <param-value>AuthenticatePatronService,com.endinfosys.voyager.webvoyage.xservice.AuthenticatePatronXService</param-value>
+        </init-param>
+    </filter>
+
+    <filter>
+        <filter-name>SetSelectedFilter</filter-name>
+        <filter-class>
+            com.endinfosys.voyager.webvoyage.servlet.SetSelectedTitlesFilter
+        </filter-class>
+    </filter>
+
+    <filter>
+        <description>
+            This filter performs maintenance operations (add/delete) on an
+            authenticated user's "list" or "bookbag" of saved items.  Configure
+            it *after* the authentication filter.
+        </description>
+        <filter-name>MyListFilter</filter-name>
+        <filter-class>
+            com.endinfosys.voyager.webvoyage.servlet.MyListFilter
+        </filter-class>
+        <init-param>
+            <param-name>XService-Bookbag</param-name>
+            <param-value>BookbagService,com.endinfosys.voyager.webvoyage.xservice.BookbagXService</param-value>
+        </init-param>
+    </filter>
+
+    <filter>
+        <description>
+            This filter performs removing any existing connection to the database and
+            connecting to the newly user defined database
+        </description>
+        <filter-name>DatabaseConnectFilter</filter-name>
+        <filter-class>
+            com.endinfosys.voyager.webvoyage.servlet.DatabaseConnectFilter
+        </filter-class>
+    </filter>
+
+    <filter>
+       <filter-name>No Frame Filter</filter-name>
+       <filter-class>com.endinfosys.util.NoFrameFilter</filter-class>
+       <init-param>
+          <param-name>enabled</param-name>
+          <param-value>false</param-value>
+       </init-param>
+       <init-param>
+          <param-name>mode</param-name>
+          <!--
+             DENY
+                The page cannot be displayed in a frame, regardless of the site attempting to do so.
+             SAMEORIGIN
+                The page can only be displayed in a frame on the same origin as the page itself.
+             ALLOW-FROM uri
+                The page can only be displayed in a frame on the specified origin.
+                This one isn't that well supported right now across all browsers.
+           -->
+          <param-value>DENY</param-value>
+       </init-param>
+   </filter>
+
+<!-- Logs cookie content to log/console
+    <filter>
+        <filter-name>CookieLogger Filter</filter-name>
+        <filter-class>
+            com.endinfosys.util.CookieLogger
+        </filter-class>
+    </filter>
+ -->
+
+    <filter>
+        <filter-name>monitoring</filter-name>
+        <filter-class>net.bull.javamelody.MonitoringFilter</filter-class>
+        <init-param>
+            <param-name>allowed-addr-pattern</param-name>
+            <!--  default permits only localhost in ipv4 and ipv6 -->
+            <param-value>localhost</param-value>
+        </init-param>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>monitoring</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <filter-mapping>
+        <filter-name>No Frame Filter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+
+    <filter-mapping>
+        <filter-name>HttpContext Filter</filter-name>
+        <url-pattern>/vwebv/*</url-pattern>
+    </filter-mapping>
+
+    <filter-mapping>
+        <filter-name>Character Encoding Filter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <filter-mapping>
+        <filter-name>VwebvSession Filter</filter-name>
+        <url-pattern>/addToList.do</url-pattern>
+        <url-pattern>/authorityInfo/*</url-pattern>
+        <url-pattern>/callNumber/*</url-pattern>
+        <url-pattern>/cancel</url-pattern>
+        <url-pattern>/changeMediaDeliveryLoc/*</url-pattern>
+        <url-pattern>/changeMediaItem/*</url-pattern>
+        <url-pattern>/changePIN.do</url-pattern>
+        <url-pattern>/changePin/*</url-pattern>
+        <url-pattern>/changeSMSNumber.do</url-pattern>
+        <url-pattern>/changeUBHoldingsLib/*</url-pattern>
+        <url-pattern>/changeUBPickupLib/*</url-pattern>
+        <url-pattern>/combineSearches.do</url-pattern>
+        <url-pattern>/config</url-pattern>
+        <url-pattern>/corridorSearch</url-pattern>
+        <url-pattern>/delFromList.do</url-pattern>
+        <url-pattern>/deleteSearch.do</url-pattern>
+        <url-pattern>/editPreferences.do</url-pattern>
+        <url-pattern>/editPreferences/*</url-pattern>
+        <url-pattern>/emailComplete/*</url-pattern>
+        <url-pattern>/emailDialog/*</url-pattern>
+    <url-pattern>/emailAuthDialog/*</url-pattern>
+        <url-pattern>/enterCourseReserve.do</url-pattern>
+        <url-pattern>/enterSelectLocation.do</url-pattern>
+        <url-pattern>/exit.do</url-pattern>
+        <url-pattern>/exportDialog.do</url-pattern>
+    <url-pattern>/exportAuthDialog.do</url-pattern>
+        <url-pattern>/exportRecord.do</url-pattern>
+        <url-pattern>/externalLogin.do</url-pattern>
+        <url-pattern>/getAuthScanDoc</url-pattern>
+        <url-pattern>/getShortLoanDates/*</url-pattern>
+        <url-pattern>/headings/*</url-pattern>
+        <url-pattern>/holdingsInfo/*</url-pattern>
+        <url-pattern>/linkResolver/*</url-pattern>
+        <url-pattern>/login.do</url-pattern>
+        <url-pattern>/login</url-pattern>
+        <url-pattern>/logout.do</url-pattern>
+        <url-pattern>/mediaBookingConf/*</url-pattern>
+        <url-pattern>/myAccount/*</url-pattern>
+        <url-pattern>/myAccountUpd/*</url-pattern>
+        <url-pattern>/myList/*</url-pattern>
+        <url-pattern>/mySearch/*</url-pattern>
+        <url-pattern>/mySearchFormSubmit.do</url-pattern>
+        <url-pattern>/patronRequest/*</url-pattern>
+        <url-pattern>/patronRequests/*</url-pattern>
+        <url-pattern>/personalInformation/*</url-pattern>
+        <url-pattern>/polygonSearch</url-pattern>
+        <url-pattern>/printDialog.do</url-pattern>
+    <url-pattern>/printAuthDialog.do</url-pattern>
+        <url-pattern>/printResults.do</url-pattern>
+        <url-pattern>/radiusSearch</url-pattern>
+        <url-pattern>/rangeSearch</url-pattern>
+        <url-pattern>/rectangleSearch</url-pattern>
+        <url-pattern>/renew</url-pattern>
+        <url-pattern>/savSelChkBx/*</url-pattern>
+        <url-pattern>/saveSearchAdd.do</url-pattern>
+        <url-pattern>/saveSearchAlertAdd.do</url-pattern>
+        <url-pattern>/search</url-pattern>
+        <url-pattern>/searchAdvanced/*</url-pattern>
+        <url-pattern>/searchAuthor/*</url-pattern>
+        <url-pattern>/searchBasic/*</url-pattern>
+        <url-pattern>/searchCourseReserveAlpha/*</url-pattern>
+        <url-pattern>/searchCourseReserveAlphaResults/*</url-pattern>
+        <url-pattern>/searchCourseReserveData/*</url-pattern>
+        <url-pattern>/searchHistory/*</url-pattern>
+        <url-pattern>/searchResults/*</url-pattern>
+        <url-pattern>/searchStatus.do</url-pattern>
+        <url-pattern>/searchStatus/*</url-pattern>
+        <url-pattern>/searchStop.do</url-pattern>
+        <url-pattern>/searchSubject/*</url-pattern>
+        <url-pattern>/selectDatabase.do</url-pattern>
+        <url-pattern>/selectDatabase/*</url-pattern>
+        <url-pattern>/selectLibraries/*</url-pattern>
+        <url-pattern>/selectLocation.do</url-pattern>
+        <url-pattern>/selectLocation/*</url-pattern>
+        <url-pattern>/sendMail.do</url-pattern>
+        <url-pattern>/sendPatronRequest.do</url-pattern>
+        <url-pattern>/staffView/*</url-pattern>
+        <url-pattern>/staffViewAuthority/*</url-pattern>
+        <url-pattern>/titles/*</url-pattern>
+        <url-pattern>/titlesUpd/*</url-pattern>
+        <url-pattern>/validateMediaEquipment/*</url-pattern>
+        <url-pattern>/validateMediaItem/*</url-pattern>
+    </filter-mapping>
+
+    <filter-mapping>
+        <filter-name>SelectSkin Filter</filter-name>
+        <url-pattern>/vwebv/*</url-pattern>
+        <url-pattern>/selectDatabase/*</url-pattern>
+        <url-pattern>/searchBasic/*</url-pattern>
+        <url-pattern>/searchHistory/*</url-pattern>
+        <url-pattern>/emailDialog/*</url-pattern>
+    <url-pattern>/emailAuthDialog/*</url-pattern>
+        <url-pattern>/emailComplete/*</url-pattern>
+        <url-pattern>/searchSubject/*</url-pattern>
+        <url-pattern>/searchAdvanced/*</url-pattern>
+        <url-pattern>/searchAuthor/*</url-pattern>
+        <url-pattern>/searchCourseReserveData/*</url-pattern>
+        <url-pattern>/searchCourseReserveAlpha/*</url-pattern>
+        <url-pattern>/searchCourseReserveAlphaResults/*</url-pattern>
+        <url-pattern>/searchStatus/*</url-pattern>
+        <url-pattern>/titles/*</url-pattern>
+        <url-pattern>/headings/*</url-pattern>
+        <url-pattern>/callNumber/*</url-pattern>
+        <url-pattern>/printDialog.do</url-pattern>
+    <url-pattern>/printAuthDialog.do</url-pattern>
+        <url-pattern>/exportDialog.do</url-pattern>
+    <url-pattern>/exportAuthDialog.do</url-pattern>
+        <url-pattern>/editPreferences/*</url-pattern>
+        <url-pattern>/changePin/*</url-pattern>
+        <url-pattern>/personalInformation/*</url-pattern>
+        <url-pattern>/myAccount/*</url-pattern>
+        <url-pattern>/myList/*</url-pattern>
+        <url-pattern>/selectLocation/*</url-pattern>
+        <url-pattern>/authorityInfo/*</url-pattern>
+        <url-pattern>/holdingsInfo/*</url-pattern>
+        <url-pattern>/staffView/*</url-pattern>
+        <url-pattern>/staffViewAuthority/*</url-pattern>
+        <url-pattern>/login/*</url-pattern>
+        <url-pattern>/login.do/*</url-pattern>
+        <url-pattern>/externalLogin.do/*</url-pattern>
+        <url-pattern>/logout.do/*</url-pattern>
+        <url-pattern>/editPreferences.do/*</url-pattern>
+        <url-pattern>/changePIN.do/*</url-pattern>
+        <url-pattern>/changeSMSNumber.do/*</url-pattern>
+        <url-pattern>/renew/*</url-pattern>
+        <url-pattern>/cancel/*</url-pattern>
+        <url-pattern>/myAccountUpd/*</url-pattern>
+        <url-pattern>/enterCourseReserve.do/*</url-pattern>
+        <url-pattern>/enterSelectLocation.do/*</url-pattern>
+        <url-pattern>/selectLocation.do/*</url-pattern>
+        <url-pattern>/selectDatabase.do/*</url-pattern>
+        <url-pattern>/search/*</url-pattern>
+        <url-pattern>/searchResults/*</url-pattern>
+        <url-pattern>/searchStop.do/*</url-pattern>
+        <url-pattern>/mediaBookingConf/*</url-pattern>
+        <url-pattern>/patronRequests/*</url-pattern>
+        <url-pattern>/patronRequest/*</url-pattern>
+        <url-pattern>/sendPatronRequest.do/*</url-pattern>
+        <url-pattern>/titlesUpd/*</url-pattern>
+        <url-pattern>/sendMail.do/*</url-pattern>
+        <url-pattern>/corridorSearch/*</url-pattern>
+        <url-pattern>/polygonSearch/*</url-pattern>
+        <url-pattern>/radiusSearch/*</url-pattern>
+        <url-pattern>/rangeSearch/*</url-pattern>
+        <url-pattern>/rectangleSearch/*</url-pattern>
+        <url-pattern>/getAuthScanDoc/*</url-pattern>
+        <url-pattern>/linkResolver/*</url-pattern>
+    </filter-mapping>
+
+    <filter-mapping>
+        <filter-name>VoyConfig Filter</filter-name>
+        <servlet-name>StartupServletData</servlet-name>
+        <servlet-name>AuthorityInfoServlet</servlet-name>
+        <servlet-name>BrowseServlet</servlet-name>
+        <servlet-name>CallNumberServlet</servlet-name>
+        <servlet-name>CancelAction</servlet-name>
+        <servlet-name>ChangePinAction</servlet-name>
+        <servlet-name>ChangePinServlet</servlet-name>
+        <servlet-name>CombineSearchesServlet</servlet-name>
+        <servlet-name>CorridorSearchServlet</servlet-name>
+        <servlet-name>DeleteSavedSearchServlet</servlet-name>
+        <servlet-name>EditPreferencesAction</servlet-name>
+        <servlet-name>EditPreferencesServlet</servlet-name>
+        <servlet-name>EmailAction</servlet-name>
+        <servlet-name>EmailCompleteServlet</servlet-name>
+        <servlet-name>EmailDialogServlet</servlet-name>
+    <servlet-name>EmailAuthDialogServlet</servlet-name>
+        <servlet-name>EnterCourseReserveAction</servlet-name>
+        <servlet-name>EnterSelectLocationAction</servlet-name>
+        <servlet-name>ExportDialogServlet</servlet-name>
+    <servlet-name>ExportAuthDialogServlet</servlet-name>
+        <servlet-name>ExportResultsServlet</servlet-name>
+        <servlet-name>ExternalLoginAction</servlet-name>
+        <servlet-name>GetAuthScanDocAction</servlet-name>
+        <servlet-name>GetLinkResolverActionServlet</servlet-name>
+        <servlet-name>HeadingsServlet</servlet-name>
+        <servlet-name>HoldingsInfoServlet</servlet-name>
+        <servlet-name>LoginAction</servlet-name>
+        <servlet-name>LoginServlet</servlet-name>
+        <servlet-name>LogoutAction</servlet-name>
+        <servlet-name>MediaBookingConfServlet</servlet-name>
+        <servlet-name>MediaDeliveryLocAction</servlet-name>
+        <servlet-name>MediaItemAction</servlet-name>
+        <servlet-name>MediaValidateEquipmentAction</servlet-name>
+        <servlet-name>MediaValidateItemAction</servlet-name>
+        <servlet-name>MyAccountActionServlet</servlet-name>
+        <servlet-name>MyAccountPageServlet</servlet-name>
+        <servlet-name>MyListPageServlet</servlet-name>
+        <servlet-name>MySearchesFormServlet</servlet-name>
+        <servlet-name>MySearchesPage</servlet-name>
+        <servlet-name>PatronRequestServlet</servlet-name>
+        <servlet-name>PatronRequestsServlet</servlet-name>
+        <servlet-name>PersonalInformationServlet</servlet-name>
+        <servlet-name>PolygonSearchServlet</servlet-name>
+        <servlet-name>PrintDialogServlet</servlet-name>
+    <servlet-name>PrintAuthDialogServlet</servlet-name>
+        <servlet-name>PrintResultsServlet</servlet-name>
+        <servlet-name>RadiusSearchServlet</servlet-name>
+        <servlet-name>RangeSearchServlet</servlet-name>
+        <servlet-name>RectangleSearchServlet</servlet-name>
+        <servlet-name>RenewAction</servlet-name>
+        <servlet-name>SaveSearchAddServlet</servlet-name>
+        <servlet-name>SaveSearchAlertAddServlet</servlet-name>
+        <servlet-name>SearchAdvancedServlet</servlet-name>
+        <servlet-name>SearchAuthorServlet</servlet-name>
+        <servlet-name>SearchBasicServlet</servlet-name>
+        <servlet-name>SearchCourseReserveAlphaServlet</servlet-name>
+        <servlet-name>SearchCourseReserveDataServlet</servlet-name>
+        <servlet-name>SearchHistoryServlet</servlet-name>
+        <servlet-name>SearchResultsAction</servlet-name>
+        <servlet-name>SearchServlet</servlet-name>
+        <servlet-name>SearchStatusActionServlet</servlet-name>
+        <servlet-name>SearchStatusServlet</servlet-name>
+        <servlet-name>SearchStopAction</servlet-name>
+        <servlet-name>SearchSubjectServlet</servlet-name>
+        <servlet-name>SelectDatabaseAction</servlet-name>
+        <servlet-name>SelectDatabaseServlet</servlet-name>
+        <servlet-name>SelectLibrariesActionServlet</servlet-name>
+        <servlet-name>SelectLocationAction</servlet-name>
+        <servlet-name>SelectLocationServlet</servlet-name>
+        <servlet-name>SelectTitlesActionServlet</servlet-name>
+        <servlet-name>SendPatronRequestAction</servlet-name>
+        <servlet-name>SessionConfigServlet</servlet-name>
+        <servlet-name>ShortLoanDatesAction</servlet-name>
+        <servlet-name>StaffViewServlet</servlet-name>
+        <servlet-name>StaffViewAuthorityServlet</servlet-name>
+        <servlet-name>Startup</servlet-name>
+        <servlet-name>TitlesActionServlet</servlet-name>
+        <servlet-name>TitlesServlet</servlet-name>
+        <servlet-name>UBHoldingsLocationAction</servlet-name>
+        <servlet-name>UBPickupLocationAction</servlet-name>
+    </filter-mapping>
+
+    <!--
+    **
+    ** Only servlets that are entry points to search services
+    ** need to be behind the SearchContextFilter
+    **
+     -->
+    <filter-mapping>
+        <filter-name>SearchContextFilter</filter-name>
+        <servlet-name>SearchResultsAction</servlet-name>
+        <url-pattern>/authorityInfo</url-pattern>
+        <url-pattern>/corridorSearch/*</url-pattern>
+        <url-pattern>/enterCourseReserve.do/*</url-pattern>
+        <url-pattern>/enterCourseReserve.do</url-pattern>
+        <url-pattern>/enterSelectLocation.do</url-pattern>
+        <url-pattern>/holdingsInfo</url-pattern>
+        <url-pattern>/login.do/*</url-pattern>
+        <url-pattern>/myAccount/*</url-pattern>
+        <url-pattern>/myList/*</url-pattern>
+        <url-pattern>/mySearch/*</url-pattern>
+        <url-pattern>/polygonSearch/*</url-pattern>
+        <url-pattern>/radiusSearch/*</url-pattern>
+        <url-pattern>/rangeSearch/*</url-pattern>
+        <url-pattern>/rectangleSearch/*</url-pattern>
+        <url-pattern>/search/*</url-pattern>
+        <url-pattern>/searchAdvanced/*</url-pattern>
+        <url-pattern>/searchAuthor/*</url-pattern>
+        <url-pattern>/searchBasic/*</url-pattern>
+        <url-pattern>/searchCourseReserveAlpha/*</url-pattern>
+        <url-pattern>/searchCourseReserveAlpha/*</url-pattern>
+        <url-pattern>/searchCourseReserveAlphaResults/*</url-pattern>
+        <url-pattern>/searchCourseReserveData/*</url-pattern>
+        <url-pattern>/searchStatus.do/*</url-pattern>
+        <url-pattern>/searchStatus/*</url-pattern>
+        <url-pattern>/searchStop.do/*</url-pattern>
+        <url-pattern>/searchSubject/*</url-pattern>
+        <url-pattern>/selectDatabase.do/*</url-pattern>
+        <url-pattern>/selectDatabase/*</url-pattern>
+        <url-pattern>/selectLocation.do</url-pattern>
+        <url-pattern>/selectLocation/*</url-pattern>
+    </filter-mapping>
+
+
+    <filter-mapping>
+        <filter-name>PDSLogout SSO Filter</filter-name>
+        <url-pattern>/pdsLogoutSSO/*</url-pattern>
+    </filter-mapping>
+
+    <filter-mapping>
+        <filter-name>PDSLogin Filter</filter-name>
+        <url-pattern>/login/*</url-pattern>
+    </filter-mapping>
+
+    <filter-mapping>
+        <filter-name>PDSLogout Filter</filter-name>
+        <servlet-name>LogoutAction</servlet-name>
+    </filter-mapping>
+
+    <filter-mapping>
+        <filter-name>PDSAuthentication Filter</filter-name>
+        <url-pattern>/addToList.do</url-pattern>
+        <url-pattern>/changePIN.do/*</url-pattern>
+        <url-pattern>/changePin/*</url-pattern>
+        <url-pattern>/changeSMSNumber.do/*</url-pattern>
+        <url-pattern>/deleteSearch.do</url-pattern>
+        <url-pattern>/delFromList.do</url-pattern>
+        <url-pattern>/editPreferences.do/*</url-pattern>
+        <url-pattern>/editPreferences/*</url-pattern>
+        <url-pattern>/getAuthScanDoc/*</url-pattern>
+        <url-pattern>/myAccount/*</url-pattern>
+        <url-pattern>/myList/*</url-pattern>
+        <url-pattern>/mySearch/*</url-pattern>
+        <url-pattern>/mySearchFormSubmit.do</url-pattern>
+        <url-pattern>/patronRequest/*</url-pattern>
+        <url-pattern>/patronRequests/*</url-pattern>
+        <url-pattern>/personalInformation/*</url-pattern>
+        <url-pattern>/saveSearchAdd.do</url-pattern>
+        <url-pattern>/saveSearchAlertAdd.do</url-pattern>
+        <url-pattern>/sendPatronRequest.do</url-pattern>
+        <servlet-name>AuthorityInfoServlet</servlet-name>
+        <servlet-name>BrowseServlet</servlet-name>
+        <servlet-name>CallNumberServlet</servlet-name>
+        <servlet-name>CancelAction</servlet-name>
+        <servlet-name>CombineSearchesServlet</servlet-name>
+        <servlet-name>CorridorSearchServlet</servlet-name>
+        <servlet-name>DeleteSavedSearchServlet</servlet-name>
+        <servlet-name>EmailAction</servlet-name>
+        <servlet-name>EmailCompleteServlet</servlet-name>
+        <servlet-name>EmailDialogServlet</servlet-name>
+    <servlet-name>EmailAuthDialogServlet</servlet-name>
+        <servlet-name>EnterCourseReserveAction</servlet-name>
+        <servlet-name>EnterSelectLocationAction</servlet-name>
+        <servlet-name>ExportDialogServlet</servlet-name>
+    <servlet-name>ExportAuthDialogServlet</servlet-name>
+        <servlet-name>ExportResultsServlet</servlet-name>
+        <servlet-name>ExternalLoginAction</servlet-name>
+        <servlet-name>GetLinkResolverActionServlet</servlet-name>
+        <servlet-name>HeadingsServlet</servlet-name>
+        <servlet-name>HoldingsInfoServlet</servlet-name>
+        <servlet-name>LoginAction</servlet-name>
+        <servlet-name>LoginServlet</servlet-name>
+        <servlet-name>LogoutAction</servlet-name>
+        <servlet-name>MediaBookingConfServlet</servlet-name>
+        <servlet-name>MediaDeliveryLocAction</servlet-name>
+        <servlet-name>MediaItemAction</servlet-name>
+        <servlet-name>MediaValidateEquipmentAction</servlet-name>
+        <servlet-name>MediaValidateItemAction</servlet-name>
+        <servlet-name>PolygonSearchServlet</servlet-name>
+        <servlet-name>RadiusSearchServlet</servlet-name>
+        <servlet-name>RangeSearchServlet</servlet-name>
+        <servlet-name>RectangleSearchServlet</servlet-name>
+        <servlet-name>PrintDialogServlet</servlet-name>
+    <servlet-name>PrintAuthDialogServlet</servlet-name>
+        <servlet-name>PrintResultsServlet</servlet-name>
+        <servlet-name>RenewAction</servlet-name>
+        <servlet-name>SearchAdvancedServlet</servlet-name>
+        <servlet-name>SearchAuthorServlet</servlet-name>
+        <servlet-name>SearchBasicServlet</servlet-name>
+        <servlet-name>SearchCourseReserveAlphaServlet</servlet-name>
+        <servlet-name>SearchCourseReserveDataServlet</servlet-name>
+        <servlet-name>SearchHistoryServlet</servlet-name>
+        <servlet-name>SearchResultsAction</servlet-name>
+        <servlet-name>SearchServlet</servlet-name>
+        <servlet-name>SearchStatusActionServlet</servlet-name>
+        <servlet-name>SearchStatusServlet</servlet-name>
+        <servlet-name>SearchStopAction</servlet-name>
+        <servlet-name>SearchSubjectServlet</servlet-name>
+        <servlet-name>SelectDatabaseAction</servlet-name>
+        <servlet-name>SelectDatabaseServlet</servlet-name>
+        <servlet-name>SelectLibrariesActionServlet</servlet-name>
+        <servlet-name>SelectLocationAction</servlet-name>
+        <servlet-name>SelectLocationServlet</servlet-name>
+        <servlet-name>SelectTitlesActionServlet</servlet-name>
+        <servlet-name>SessionConfigServlet</servlet-name>
+        <servlet-name>ShortLoanDatesAction</servlet-name>
+        <servlet-name>StaffViewServlet</servlet-name>
+        <servlet-name>StaffViewAuthorityServlet</servlet-name>
+        <servlet-name>Startup</servlet-name>
+        <servlet-name>TitlesActionServlet</servlet-name>
+        <servlet-name>TitlesServlet</servlet-name>
+        <servlet-name>UBHoldingsLocationAction</servlet-name>
+        <servlet-name>UBPickupLocationAction</servlet-name>
+    </filter-mapping>
+
+    <filter-mapping>
+        <filter-name>PDSLoginFailure Filter</filter-name>
+        <url-pattern>/authorityInfo/*</url-pattern>
+        <url-pattern>/callNumber/*</url-pattern>
+        <url-pattern>/cancel/*</url-pattern>
+        <url-pattern>/changePIN.do/*</url-pattern>
+        <url-pattern>/changePin/*</url-pattern>
+        <url-pattern>/changeSMSNumber.do/*</url-pattern>
+        <url-pattern>/corridorSearch/*</url-pattern>
+        <url-pattern>/editPreferences.do/*</url-pattern>
+        <url-pattern>/editPreferences/*</url-pattern>
+        <url-pattern>/emailComplete/*</url-pattern>
+        <url-pattern>/emailDialog/*</url-pattern>
+    <url-pattern>/emailAuthDialog/*</url-pattern>
+        <url-pattern>/enterCourseReserve.do/*</url-pattern>
+        <url-pattern>/enterSelectLocation.do/*</url-pattern>
+        <url-pattern>/exportDialog.do</url-pattern>
+    <url-pattern>/exportAuthDialog.do</url-pattern>
+        <url-pattern>/externalLogin.do/*</url-pattern>
+        <url-pattern>/getAuthScanDoc/*</url-pattern>
+        <url-pattern>/headings/*</url-pattern>
+        <url-pattern>/holdingsInfo/*</url-pattern>
+        <url-pattern>/linkResolver/*</url-pattern>
+        <url-pattern>/login.do/*</url-pattern>
+        <url-pattern>/login/*</url-pattern>
+        <url-pattern>/mediaBookingConf/*</url-pattern>
+        <url-pattern>/myAccount/*</url-pattern>
+        <url-pattern>/myAccountUpd/*</url-pattern>
+        <url-pattern>/myList/*</url-pattern>
+        <url-pattern>/patronRequest/*</url-pattern>
+        <url-pattern>/patronRequests/*</url-pattern>
+        <url-pattern>/personalInformation/*</url-pattern>
+        <url-pattern>/polygonSearch/*</url-pattern>
+        <url-pattern>/printDialog.do</url-pattern>
+    <url-pattern>/printAuthDialog.do</url-pattern>
+        <url-pattern>/radiusSearch/*</url-pattern>
+        <url-pattern>/rangeSearch/*</url-pattern>
+        <url-pattern>/rectangleSearch/*</url-pattern>
+        <url-pattern>/renew/*</url-pattern>
+        <url-pattern>/search/*</url-pattern>
+        <url-pattern>/searchAdvanced/*</url-pattern>
+        <url-pattern>/searchAuthor/*</url-pattern>
+        <servlet-name>SearchBasicServlet</servlet-name>
+        <url-pattern>/searchBasic/*</url-pattern>
+        <url-pattern>/searchCourseReserveAlpha/*</url-pattern>
+        <url-pattern>/searchCourseReserveAlphaResults/*</url-pattern>
+        <url-pattern>/searchCourseReserveData/*</url-pattern>
+        <url-pattern>/searchHistory/*</url-pattern>
+        <url-pattern>/searchResults/*</url-pattern>
+        <url-pattern>/searchStatus/*</url-pattern>
+        <url-pattern>/searchStop.do/*</url-pattern>
+        <url-pattern>/searchSubject/*</url-pattern>
+        <url-pattern>/selectDatabase.do/*</url-pattern>
+        <url-pattern>/selectDatabase/*</url-pattern>
+        <url-pattern>/selectLocation.do/*</url-pattern>
+        <url-pattern>/selectLocation/*</url-pattern>
+        <url-pattern>/sendMail.do/*</url-pattern>
+        <url-pattern>/sendPatronRequest.do/*</url-pattern>
+        <url-pattern>/staffView/*</url-pattern>
+        <url-pattern>/staffViewAuthority/*</url-pattern>
+        <url-pattern>/titles/*</url-pattern>
+        <url-pattern>/titlesUpd/*</url-pattern>
+    </filter-mapping>
+
+    <filter-mapping>
+        <filter-name>PDSForwardToLogin Filter</filter-name>
+        <url-pattern>/addToList.do</url-pattern>
+        <url-pattern>/changePIN.do/*</url-pattern>
+        <url-pattern>/changePin/*</url-pattern>
+        <url-pattern>/changeSMSNumber.do/*</url-pattern>
+        <url-pattern>/deleteSearch.do</url-pattern>
+        <url-pattern>/delFromList.do</url-pattern>
+        <url-pattern>/editPreferences.do/*</url-pattern>
+        <url-pattern>/editPreferences/*</url-pattern>
+        <url-pattern>/getAuthScanDoc/*</url-pattern>
+        <url-pattern>/myAccount/*</url-pattern>
+        <url-pattern>/myList/*</url-pattern>
+        <url-pattern>/mySearch/*</url-pattern>
+        <url-pattern>/mySearchFormSubmit.do</url-pattern>
+        <url-pattern>/patronRequest/*</url-pattern>
+        <url-pattern>/patronRequests/*</url-pattern>
+        <url-pattern>/personalInformation/*</url-pattern>
+        <url-pattern>/saveSearchAdd.do</url-pattern>
+        <url-pattern>/saveSearchAlertAdd.do</url-pattern>
+        <url-pattern>/sendPatronRequest.do</url-pattern>
+        <servlet-name>AuthorityInfoServlet</servlet-name>
+        <servlet-name>BrowseServlet</servlet-name>
+        <servlet-name>CallNumberServlet</servlet-name>
+        <servlet-name>CancelAction</servlet-name>
+        <servlet-name>CombineSearchesServlet</servlet-name>
+        <servlet-name>CorridorSearchServlet</servlet-name>
+        <servlet-name>DeleteSavedSearchServlet</servlet-name>
+        <servlet-name>EmailAction</servlet-name>
+        <servlet-name>EmailCompleteServlet</servlet-name>
+        <servlet-name>EmailDialogServlet</servlet-name>
+    <servlet-name>EmailAuthDialogServlet</servlet-name>
+        <servlet-name>EnterCourseReserveAction</servlet-name>
+        <servlet-name>EnterSelectLocationAction</servlet-name>
+        <servlet-name>ExportDialogServlet</servlet-name>
+    <servlet-name>ExportAuthDialogServlet</servlet-name>
+        <servlet-name>ExportResultsServlet</servlet-name>
+        <servlet-name>ExternalLoginAction</servlet-name>
+        <servlet-name>GetLinkResolverActionServlet</servlet-name>
+        <servlet-name>HeadingsServlet</servlet-name>
+        <servlet-name>HoldingsInfoServlet</servlet-name>
+        <servlet-name>LoginAction</servlet-name>
+        <servlet-name>LoginServlet</servlet-name>
+        <servlet-name>LogoutAction</servlet-name>
+        <servlet-name>MediaBookingConfServlet</servlet-name>
+        <servlet-name>MediaDeliveryLocAction</servlet-name>
+        <servlet-name>MediaItemAction</servlet-name>
+        <servlet-name>MediaValidateEquipmentAction</servlet-name>
+        <servlet-name>MediaValidateItemAction</servlet-name>
+        <servlet-name>PolygonSearchServlet</servlet-name>
+        <servlet-name>PrintDialogServlet</servlet-name>
+    <servlet-name>PrintAuthDialogServlet</servlet-name>
+        <servlet-name>PrintResultsServlet</servlet-name>
+        <servlet-name>RadiusSearchServlet</servlet-name>
+        <servlet-name>RangeSearchServlet</servlet-name>
+        <servlet-name>RectangleSearchServlet</servlet-name>
+        <servlet-name>RenewAction</servlet-name>
+        <servlet-name>SearchAdvancedServlet</servlet-name>
+        <servlet-name>SearchAuthorServlet</servlet-name>
+        <servlet-name>SearchBasicServlet</servlet-name>
+        <servlet-name>SearchCourseReserveAlphaServlet</servlet-name>
+        <servlet-name>SearchCourseReserveDataServlet</servlet-name>
+        <servlet-name>SearchHistoryServlet</servlet-name>
+        <servlet-name>SearchResultsAction</servlet-name>
+        <servlet-name>SearchServlet</servlet-name>
+        <servlet-name>SearchStatusActionServlet</servlet-name>
+        <servlet-name>SearchStatusServlet</servlet-name>
+        <servlet-name>SearchStopAction</servlet-name>
+        <servlet-name>SearchSubjectServlet</servlet-name>
+        <servlet-name>SelectDatabaseAction</servlet-name>
+        <servlet-name>SelectDatabaseServlet</servlet-name>
+        <servlet-name>SelectLibrariesActionServlet</servlet-name>
+        <servlet-name>SelectLocationAction</servlet-name>
+        <servlet-name>SelectLocationServlet</servlet-name>
+        <servlet-name>SelectTitlesActionServlet</servlet-name>
+        <servlet-name>SessionConfigServlet</servlet-name>
+        <servlet-name>ShortLoanDatesAction</servlet-name>
+        <servlet-name>StaffViewServlet</servlet-name>
+        <servlet-name>StaffViewAuthorityServlet</servlet-name>
+        <servlet-name>Startup</servlet-name>
+        <servlet-name>TitlesActionServlet</servlet-name>
+        <servlet-name>TitlesServlet</servlet-name>
+        <servlet-name>UBHoldingsLocationAction</servlet-name>
+        <servlet-name>UBPickupLocationAction</servlet-name>
+    </filter-mapping>
+
+    <filter-mapping>
+        <filter-name>SearchBasic Filter</filter-name>
+        <url-pattern>/searchBasic/*</url-pattern>
+        <url-pattern>/search/*</url-pattern>
+    </filter-mapping>
+
+    <filter-mapping>
+        <filter-name>DatabaseConnectFilter</filter-name>
+        <url-pattern>/search/*</url-pattern>
+        <url-pattern>/selectDatabase.do/*</url-pattern>
+        <url-pattern>/editPreferences.do/*</url-pattern>
+    </filter-mapping>
+
+    <!--
+    **
+    ** Only servlets that may cause changes in the
+    ** list of 'selected' bibs need to be behind
+    ** the SetSelectedFilter
+    **
+     -->
+
+    <filter-mapping>
+        <filter-name>SetSelectedFilter</filter-name>
+        <servlet-name>PrintDialogServlet</servlet-name>
+    <servlet-name>PrintAuthDialogServlet</servlet-name>
+        <servlet-name>EmailDialogServlet</servlet-name>
+    <servlet-name>EmailAuthDialogServlet</servlet-name>
+        <servlet-name>ExportDialogServlet</servlet-name>
+    <servlet-name>ExportAuthDialogServlet</servlet-name>
+        <servlet-name>ExportResultsServlet</servlet-name>
+        <servlet-name>TitlesActionServlet</servlet-name>
+        <servlet-name>SelectTitlesActionServlet</servlet-name>
+        <servlet-name>MyListPageServlet</servlet-name>
+    </filter-mapping>
+<!--
+    <filter-mapping>
+        <filter-name>CookieLogger Filter</filter-name>
+        <url-pattern>/vvwebv/*</url-pattern>
+    </filter-mapping>
+-->
+
+    <!--
+    **
+    ** Only servlets that are available only to authenticated users
+    ** need to be behind the Authentication Filter
+    **
+     -->
+    <filter-mapping>
+        <filter-name>Authentication Filter</filter-name>
+        <url-pattern>/addToList.do</url-pattern>
+        <url-pattern>/changePIN.do/*</url-pattern>
+        <url-pattern>/changePin/*</url-pattern>
+        <url-pattern>/changeSMSNumber.do/*</url-pattern>
+        <url-pattern>/deleteSearch.do</url-pattern>
+        <url-pattern>/delFromList.do</url-pattern>
+        <url-pattern>/editPreferences.do/*</url-pattern>
+        <url-pattern>/editPreferences/*</url-pattern>
+        <url-pattern>/getAuthScanDoc/*</url-pattern>
+        <url-pattern>/myAccount/*</url-pattern>
+        <url-pattern>/myList/*</url-pattern>
+        <url-pattern>/mySearch/*</url-pattern>
+        <url-pattern>/mySearchFormSubmit.do</url-pattern>
+        <url-pattern>/patronRequest/*</url-pattern>
+        <url-pattern>/patronRequests/*</url-pattern>
+        <url-pattern>/personalInformation/*</url-pattern>
+        <url-pattern>/saveSearchAdd.do</url-pattern>
+        <url-pattern>/saveSearchAlertAdd.do</url-pattern>
+        <url-pattern>/sendPatronRequest.do</url-pattern>
+    </filter-mapping>
+
+    <!--
+        **
+        ** Only servlets that may cause changes in the
+        ** user's bookbag list need to be behind the
+        ** MyListFilter
+        **
+    -->
+    <filter-mapping>
+        <filter-name>MyListFilter</filter-name>
+        <servlet-name>MyListPageServlet</servlet-name>
+        <servlet-name>SearchResultsAction</servlet-name>
+        <servlet-name>HoldingsInfoServlet</servlet-name>
+    </filter-mapping>
+
+
+
+
+    <!--
+        ###########################
+        ###                     ###
+        ### Servlet Definitions ###
+        ###                     ###
+        ###########################
+    -->
+
+     <!--
+         The Startup servlet only has an init method, and runs only
+         as the system starts to collect configuration data.  It should
+         *not* have any mappings associated with it!
+      -->
+    <servlet>
+        <display-name>Startup Servlet</display-name>
+        <servlet-name>Startup</servlet-name>
+        <servlet-class>
+            com.endinfosys.voyager.webvoyage.servlet.StartupServlet
+        </servlet-class>
+        <init-param>
+            <param-name>XService-GetConfiguration</param-name>
+            <param-value>GetConfigurationService</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XService-BibLoggingService</param-name>
+            <param-value>BibLoggingService</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+
+    <servlet>
+        <display-name>SelectDatabaseServlet</display-name>
+        <servlet-name>SelectDatabaseServlet</servlet-name>
+        <servlet-class>
+            com.endinfosys.voyager.webvoyage.servlet.PageServlet
+        </servlet-class>
+        <init-param>
+            <param-name>PageCode</param-name>
+            <param-value>selectDatabase</param-value>
+        </init-param>
+        <init-param>
+            <param-name>PageClass</param-name>
+            <param-value>com.endinfosys.voyager.webvoyage.pages.SelectDatabasePage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XSLTemplateName</param-name>
+            <param-value>selectDatabases.xsl</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Custom</param-name>
+            <param-value>webvoyage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Internal</param-name>
+            <param-value>internal</param-value>
+        </init-param>
+        <init-param>
+            <param-name>HelpPage</param-name>
+            <param-value>selectDatabase.html</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet>
+        <display-name>SearchBasicServlet</display-name>
+        <servlet-name>SearchBasicServlet</servlet-name>
+        <servlet-class>
+            com.endinfosys.voyager.webvoyage.servlet.SearchDefinitionPageServlet
+        </servlet-class>
+        <init-param>
+            <param-name>PageCode</param-name>
+            <param-value>searchBasic</param-value>
+        </init-param>
+        <init-param>
+            <param-name>PageClass</param-name>
+            <param-value>com.endinfosys.voyager.webvoyage.pages.SearchBasicPage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XSLTemplateName</param-name>
+            <param-value>searchBasic.xsl</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Custom</param-name>
+            <param-value>webvoyage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Internal</param-name>
+            <param-value>internal</param-value>
+        </init-param>
+        <init-param>
+            <param-name>HelpPage</param-name>
+            <param-value>searchBasic.html</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet>
+        <display-name>SearchHistoryServlet</display-name>
+        <servlet-name>SearchHistoryServlet</servlet-name>
+        <servlet-class>
+            com.endinfosys.voyager.webvoyage.servlet.PageServlet
+        </servlet-class>
+        <init-param>
+            <param-name>PageCode</param-name>
+            <param-value>searchHistory</param-value>
+        </init-param>
+        <init-param>
+            <param-name>PageClass</param-name>
+            <param-value>com.endinfosys.voyager.webvoyage.pages.SearchHistoryPage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XSLTemplateName</param-name>
+            <param-value>searchHistory.xsl</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Custom</param-name>
+            <param-value>webvoyage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Internal</param-name>
+            <param-value>internal</param-value>
+        </init-param>
+        <init-param>
+            <param-name>HelpPage</param-name>
+            <param-value>searchHistory.html</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet>
+        <display-name>EmailDialogServlet</display-name>
+        <servlet-name>EmailDialogServlet</servlet-name>
+        <servlet-class>
+            com.endinfosys.voyager.webvoyage.servlet.PageServlet
+        </servlet-class>
+        <init-param>
+            <param-name>PageCode</param-name>
+            <param-value>emailDialog</param-value>
+        </init-param>
+        <init-param>
+            <param-name>PageClass</param-name>
+            <param-value>com.endinfosys.voyager.webvoyage.pages.SearchResultsEmailResultsPage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XSLTemplateName</param-name>
+            <param-value>eMailDialog.xsl</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Custom</param-name>
+            <param-value>webvoyage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Internal</param-name>
+            <param-value>internal</param-value>
+        </init-param>
+        <init-param>
+            <param-name>HelpPage</param-name>
+            <param-value>eMailDialog.html</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet>
+        <display-name>EmailAuthDialogServlet</display-name>
+        <servlet-name>EmailAuthDialogServlet</servlet-name>
+        <servlet-class>
+            com.endinfosys.voyager.webvoyage.servlet.PageServlet
+        </servlet-class>
+        <init-param>
+            <param-name>PageCode</param-name>
+            <param-value>emailDialog</param-value>
+        </init-param>
+        <init-param>
+            <param-name>PageClass</param-name>
+            <param-value>com.endinfosys.voyager.webvoyage.pages.SearchResultsEmailResultsPage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XSLTemplateName</param-name>
+            <param-value>eMailAuthDialog.xsl</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Custom</param-name>
+            <param-value>webvoyage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Internal</param-name>
+            <param-value>internal</param-value>
+        </init-param>
+        <init-param>
+            <param-name>HelpPage</param-name>
+            <param-value>eMailAuthDialog.html</param-value>
+        </init-param>
+    </servlet>
+
+
+    <servlet>
+        <display-name>EmailCompleteServlet</display-name>
+        <servlet-name>EmailCompleteServlet</servlet-name>
+        <servlet-class>
+            com.endinfosys.voyager.webvoyage.servlet.PageServlet
+        </servlet-class>
+        <init-param>
+            <param-name>PageCode</param-name>
+            <param-value>emailComplete</param-value>
+        </init-param>
+        <init-param>
+            <param-name>PageClass</param-name>
+            <param-value>com.endinfosys.voyager.webvoyage.pages.SearchResultsEmailCompletePage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XSLTemplateName</param-name>
+            <param-value>confirmation.xsl</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Custom</param-name>
+            <param-value>webvoyage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Internal</param-name>
+            <param-value>internal</param-value>
+        </init-param>
+        <init-param>
+            <param-name>HelpPage</param-name>
+            <param-value>index.html</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet>
+        <display-name>SearchSubjectServlet</display-name>
+        <servlet-name>SearchSubjectServlet</servlet-name>
+        <servlet-class>
+            com.endinfosys.voyager.webvoyage.servlet.SearchDefinitionPageServlet
+        </servlet-class>
+        <init-param>
+            <param-name>PageCode</param-name>
+            <param-value>searchSubject</param-value>
+        </init-param>
+        <init-param>
+            <param-name>PageClass</param-name>
+            <param-value>com.endinfosys.voyager.webvoyage.pages.SearchSubjectPage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XSLTemplateName</param-name>
+            <param-value>searchSubject.xsl</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Custom</param-name>
+            <param-value>webvoyage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Internal</param-name>
+            <param-value>internal</param-value>
+        </init-param>
+        <init-param>
+            <param-name>HelpPage</param-name>
+            <param-value>searchSubject.html</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet>
+        <display-name>SearchAdvancedServlet</display-name>
+        <servlet-name>SearchAdvancedServlet</servlet-name>
+        <servlet-class>
+            com.endinfosys.voyager.webvoyage.servlet.SearchDefinitionPageServlet
+        </servlet-class>
+        <init-param>
+            <param-name>PageCode</param-name>
+            <param-value>searchSubject</param-value>
+        </init-param>
+        <init-param>
+            <param-name>PageClass</param-name>
+            <param-value>com.endinfosys.voyager.webvoyage.pages.SearchAdvancedPage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XSLTemplateName</param-name>
+            <param-value>searchAdvanced.xsl</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Custom</param-name>
+            <param-value>webvoyage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Internal</param-name>
+            <param-value>internal</param-value>
+        </init-param>
+        <init-param>
+            <param-name>HelpPage</param-name>
+            <param-value>searchAdvanced.html</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet>
+        <display-name>SearchAuthorServlet</display-name>
+        <servlet-name>SearchAuthorServlet</servlet-name>
+        <servlet-class>
+            com.endinfosys.voyager.webvoyage.servlet.SearchDefinitionPageServlet
+        </servlet-class>
+        <init-param>
+            <param-name>PageCode</param-name>
+            <param-value>searchAuthor</param-value>
+        </init-param>
+        <init-param>
+            <param-name>PageClass</param-name>
+            <param-value>com.endinfosys.voyager.webvoyage.pages.SearchAuthorPage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XSLTemplateName</param-name>
+            <param-value>searchAuthor.xsl</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Custom</param-name>
+            <param-value>webvoyage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Internal</param-name>
+            <param-value>internal</param-value>
+        </init-param>
+        <init-param>
+            <param-name>HelpPage</param-name>
+            <param-value>searchAuthor.html</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet>
+        <display-name>SearchCourseReserveDataServlet</display-name>
+        <servlet-name>SearchCourseReserveDataServlet</servlet-name>
+        <servlet-class>
+            com.endinfosys.voyager.webvoyage.servlet.PageServlet
+        </servlet-class>
+        <init-param>
+            <param-name>PageCode</param-name>
+            <param-value>searchCourseReserveData</param-value>
+        </init-param>
+        <init-param>
+            <param-name>PageClass</param-name>
+            <param-value>com.endinfosys.voyager.webvoyage.pages.SearchCourseReserveDataPage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XSLTemplateName</param-name>
+            <param-value>searchCourseReserves.xsl</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XService-CourseReserveProperties</param-name>
+            <param-value>CourseReservePropertiesService,com.endinfosys.voyager.webvoyage.xservice.CourseReservePropertiesXService</param-value>
+        </init-param>
+       <init-param>
+            <param-name>Properties-Custom</param-name>
+            <param-value>webvoyage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Internal</param-name>
+            <param-value>internal</param-value>
+        </init-param>
+        <init-param>
+            <param-name>HelpPage</param-name>
+            <param-value>searchCourseReserve.html</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet>
+        <display-name>SearchCourseReserveAlphaServlet</display-name>
+        <servlet-name>SearchCourseReserveAlphaServlet</servlet-name>
+        <servlet-class>
+            com.endinfosys.voyager.webvoyage.servlet.PageServlet
+        </servlet-class>
+        <init-param>
+            <param-name>PageCode</param-name>
+            <param-value>searchCourseReserveAlpha</param-value>
+        </init-param>
+        <init-param>
+            <param-name>PageClass</param-name>
+            <param-value>com.endinfosys.voyager.webvoyage.pages.SearchCourseReserveAlphaPage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XSLTemplateName</param-name>
+            <param-value>searchCourseReserveAlpha.xsl</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XService-CourseReserveProperties</param-name>
+            <param-value>CourseReservePropertiesService,com.endinfosys.voyager.webvoyage.xservice.CourseReservePropertiesXService</param-value>
+        </init-param>
+       <init-param>
+            <param-name>Properties-Custom</param-name>
+            <param-value>webvoyage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Internal</param-name>
+            <param-value>internal</param-value>
+        </init-param>
+        <init-param>
+            <param-name>HelpPage</param-name>
+            <param-value>searchCourseReservesAlpha.html</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet>
+        <display-name>CorridorSearchServlet</display-name>
+        <servlet-name>CorridorSearchServlet</servlet-name>
+        <servlet-class>
+            com.endinfosys.voyager.webvoyage.servlet.SearchDefinitionPageServlet
+        </servlet-class>
+        <init-param>
+            <param-name>PageCode</param-name>
+            <param-value>corridorSearch</param-value>
+        </init-param>
+        <init-param>
+            <param-name>PageClass</param-name>
+            <param-value>com.endinfosys.voyager.webvoyage.pages.SearchMapCorridorPage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XSLTemplateName</param-name>
+            <param-value>geoSearchCorridor.xsl</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Custom</param-name>
+            <param-value>webvoyage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Internal</param-name>
+            <param-value>internal</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-MapSearch</param-name>
+            <param-value>mapSearch</param-value>
+        </init-param>
+        <init-param>
+            <param-name>HelpPage</param-name>
+            <param-value>searchGeospatial.html#corridorSearch</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet>
+        <display-name>PolygonSearchServlet</display-name>
+        <servlet-name>PolygonSearchServlet</servlet-name>
+        <servlet-class>
+            com.endinfosys.voyager.webvoyage.servlet.SearchDefinitionPageServlet
+        </servlet-class>
+        <init-param>
+            <param-name>PageCode</param-name>
+            <param-value>polygonSearch</param-value>
+        </init-param>
+        <init-param>
+            <param-name>PageClass</param-name>
+            <param-value>com.endinfosys.voyager.webvoyage.pages.SearchMapPolygonPage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XSLTemplateName</param-name>
+            <param-value>geoSearchPolygon.xsl</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Custom</param-name>
+            <param-value>webvoyage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Internal</param-name>
+            <param-value>internal</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-MapSearch</param-name>
+            <param-value>mapSearch</param-value>
+        </init-param>
+        <init-param>
+            <param-name>HelpPage</param-name>
+            <param-value>searchGeospatial.html#polygonSearch</param-value>
+        </init-param>
+    </servlet>
+
+     <servlet>
+        <display-name>RadiusSearchServlet</display-name>
+        <servlet-name>RadiusSearchServlet</servlet-name>
+        <servlet-class>
+            com.endinfosys.voyager.webvoyage.servlet.SearchDefinitionPageServlet
+        </servlet-class>
+        <init-param>
+            <param-name>PageCode</param-name>
+            <param-value>radiusSearch</param-value>
+        </init-param>
+        <init-param>
+            <param-name>PageClass</param-name>
+            <param-value>com.endinfosys.voyager.webvoyage.pages.SearchMapRadiusPage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XSLTemplateName</param-name>
+            <param-value>geoSearchRadius.xsl</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Custom</param-name>
+            <param-value>webvoyage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Internal</param-name>
+            <param-value>internal</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-MapSearch</param-name>
+            <param-value>mapSearch</param-value>
+        </init-param>
+        <init-param>
+            <param-name>HelpPage</param-name>
+            <param-value>searchGeospatial.html#radiusSearch</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet>
+        <display-name>RangeSearchServlet</display-name>
+        <servlet-name>RangeSearchServlet</servlet-name>
+        <servlet-class>
+            com.endinfosys.voyager.webvoyage.servlet.SearchDefinitionPageServlet
+        </servlet-class>
+        <init-param>
+            <param-name>PageCode</param-name>
+            <param-value>rangeSearch</param-value>
+        </init-param>
+        <init-param>
+            <param-name>PageClass</param-name>
+            <param-value>com.endinfosys.voyager.webvoyage.pages.SearchMapRangePage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XSLTemplateName</param-name>
+            <param-value>geoSearchRange.xsl</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Custom</param-name>
+            <param-value>webvoyage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Internal</param-name>
+            <param-value>internal</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-MapSearch</param-name>
+            <param-value>mapSearch</param-value>
+        </init-param>
+        <init-param>
+            <param-name>HelpPage</param-name>
+            <param-value>searchGeospatial.html#rangeSearch</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet>
+        <display-name>RectangleSearchServlet</display-name>
+        <servlet-name>RectangleSearchServlet</servlet-name>
+        <servlet-class>
+            com.endinfosys.voyager.webvoyage.servlet.SearchDefinitionPageServlet
+        </servlet-class>
+        <init-param>
+            <param-name>PageCode</param-name>
+            <param-value>corridorSearch</param-value>
+        </init-param>
+        <init-param>
+            <param-name>PageClass</param-name>
+            <param-value>com.endinfosys.voyager.webvoyage.pages.SearchMapRectanglePage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XSLTemplateName</param-name>
+            <param-value>geoSearchRectangle.xsl</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Custom</param-name>
+            <param-value>webvoyage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Internal</param-name>
+            <param-value>internal</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-MapSearch</param-name>
+            <param-value>mapSearch</param-value>
+        </init-param>
+        <init-param>
+            <param-name>HelpPage</param-name>
+            <param-value>searchGeospatial.html#rectangleSearch</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet>
+        <display-name>EditPreferencesServlet</display-name>
+        <servlet-name>EditPreferencesServlet</servlet-name>
+        <servlet-class>
+            com.endinfosys.voyager.webvoyage.servlet.PageServlet
+        </servlet-class>
+        <init-param>
+            <param-name>PageCode</param-name>
+            <param-value>editPreferences</param-value>
+        </init-param>
+        <init-param>
+            <param-name>PageClass</param-name>
+            <param-value>com.endinfosys.voyager.webvoyage.pages.EditPreferencesPage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XSLTemplateName</param-name>
+            <param-value>preferences.xsl</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XService-SearchPreferences</param-name>
+            <param-value>SearchPreferencesService,com.endinfosys.voyager.webvoyage.xservice.SearchPreferencesXService</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Custom</param-name>
+            <param-value>webvoyage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Internal</param-name>
+            <param-value>internal</param-value>
+        </init-param>
+        <init-param>
+            <param-name>HelpPage</param-name>
+            <param-value>editPreferences.html</param-value>
+        </init-param>
+    </servlet>
+
+  <servlet>
+        <display-name>SearchStatusServlet</display-name>
+        <servlet-name>SearchStatusServlet</servlet-name>
+        <servlet-class>
+            com.endinfosys.voyager.webvoyage.servlet.PageServlet
+        </servlet-class>
+        <init-param>
+            <param-name>PageCode</param-name>
+            <param-value>searchStatus</param-value>
+        </init-param>
+        <init-param>
+            <param-name>PageClass</param-name>
+            <param-value>com.endinfosys.voyager.webvoyage.pages.SearchStatusPage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XSLTemplateName</param-name>
+            <param-value>searchStatus.xsl</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Custom</param-name>
+            <param-value>webvoyage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Internal</param-name>
+            <param-value>internal</param-value>
+        </init-param>
+        <init-param>
+            <param-name>HelpPage</param-name>
+            <param-value>searchStatus.html</param-value>
+        </init-param>
+    </servlet>
+
+  <servlet>
+        <display-name>TitlesServlet</display-name>
+        <servlet-name>TitlesServlet</servlet-name>
+        <servlet-class>
+            com.endinfosys.voyager.webvoyage.servlet.PageServlet
+        </servlet-class>
+        <init-param>
+            <param-name>PageCode</param-name>
+            <param-value>searchResultsTitles</param-value>
+        </init-param>
+        <init-param>
+            <param-name>PageClass</param-name>
+            <param-value>com.endinfosys.voyager.webvoyage.pages.SearchResultsTitlesPage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XSLTemplateName</param-name>
+            <param-value>resultsTitles.xsl</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Custom</param-name>
+            <param-value>webvoyage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Internal</param-name>
+            <param-value>internal</param-value>
+        </init-param>
+        <init-param>
+            <param-name>HelpPage</param-name>
+            <param-value>searchResultsTitles.html</param-value>
+        </init-param>
+    </servlet>
+
+     <servlet>
+        <display-name>PrintDialogServlet</display-name>
+        <servlet-name>PrintDialogServlet</servlet-name>
+        <servlet-class>
+            com.endinfosys.voyager.webvoyage.servlet.PageServlet
+        </servlet-class>
+        <init-param>
+            <param-name>PageCode</param-name>
+            <param-value>printDialog</param-value>
+        </init-param>
+        <init-param>
+            <param-name>PageClass</param-name>
+            <param-value>com.endinfosys.voyager.webvoyage.pages.PrintDialogPage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XSLTemplateName</param-name>
+            <param-value>printRecordDialog.xsl</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Custom</param-name>
+            <param-value>webvoyage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Internal</param-name>
+            <param-value>internal</param-value>
+        </init-param>
+        <init-param>
+            <param-name>HelpPage</param-name>
+            <param-value>printDialog.html</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet>
+        <display-name>PrintAuthDialogServlet</display-name>
+        <servlet-name>PrintAuthDialogServlet</servlet-name>
+        <servlet-class>
+            com.endinfosys.voyager.webvoyage.servlet.PageServlet
+        </servlet-class>
+        <init-param>
+            <param-name>PageCode</param-name>
+            <param-value>printDialog</param-value>
+        </init-param>
+        <init-param>
+            <param-name>PageClass</param-name>
+            <param-value>com.endinfosys.voyager.webvoyage.pages.PrintDialogPage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XSLTemplateName</param-name>
+            <param-value>printAuthRecordDialog.xsl</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Custom</param-name>
+            <param-value>webvoyage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Internal</param-name>
+            <param-value>internal</param-value>
+        </init-param>
+        <init-param>
+            <param-name>HelpPage</param-name>
+            <param-value>printAuthDialog.html</param-value>
+        </init-param>
+    </servlet>
+
+
+    <servlet>
+        <display-name>PrintResultsServlet</display-name>
+        <servlet-name>PrintResultsServlet</servlet-name>
+        <servlet-class>
+            com.endinfosys.voyager.webvoyage.servlet.PrintResultsServlet
+        </servlet-class>
+        <init-param>
+            <param-name>PageCode</param-name>
+            <param-value>printResults</param-value>
+        </init-param>
+        <init-param>
+            <param-name>PageClass</param-name>
+            <param-value>com.endinfosys.voyager.webvoyage.pages.PrintResultsPage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XSLTemplateName</param-name>
+            <param-value>printCommon.xsl</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Custom</param-name>
+            <param-value>webvoyage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Internal</param-name>
+            <param-value>internal</param-value>
+        </init-param>
+        <init-param>
+            <param-name>HelpPage</param-name>
+            <param-value>printResults.html</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet>
+        <display-name>ExportDialogServlet</display-name>
+        <servlet-name>ExportDialogServlet</servlet-name>
+        <servlet-class>
+            com.endinfosys.voyager.webvoyage.servlet.PageServlet
+        </servlet-class>
+        <init-param>
+            <param-name>PageCode</param-name>
+            <param-value>exportDialog</param-value>
+        </init-param>
+        <init-param>
+            <param-name>PageClass</param-name>
+            <param-value>com.endinfosys.voyager.webvoyage.pages.ExportDialogPage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XSLTemplateName</param-name>
+            <param-value>exportRecordDialog.xsl</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Custom</param-name>
+            <param-value>webvoyage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Internal</param-name>
+            <param-value>internal</param-value>
+        </init-param>
+        <init-param>
+            <param-name>HelpPage</param-name>
+            <param-value>exportDialog.html</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet>
+        <display-name>ExportAuthDialogServlet</display-name>
+        <servlet-name>ExportAuthDialogServlet</servlet-name>
+        <servlet-class>
+            com.endinfosys.voyager.webvoyage.servlet.PageServlet
+        </servlet-class>
+        <init-param>
+            <param-name>PageCode</param-name>
+            <param-value>exportDialog</param-value>
+        </init-param>
+        <init-param>
+            <param-name>PageClass</param-name>
+            <param-value>com.endinfosys.voyager.webvoyage.pages.ExportDialogPage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XSLTemplateName</param-name>
+            <param-value>exportAuthRecordDialog.xsl</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Custom</param-name>
+            <param-value>webvoyage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Internal</param-name>
+            <param-value>internal</param-value>
+        </init-param>
+        <init-param>
+            <param-name>HelpPage</param-name>
+            <param-value>exportAuthDialog.html</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet>
+        <display-name>ExportResultsServlet</display-name>
+        <servlet-name>ExportResultsServlet</servlet-name>
+        <servlet-class>
+            com.endinfosys.voyager.webvoyage.servlet.ExportResultsServlet
+        </servlet-class>
+        <init-param>
+            <param-name>PageCode</param-name>
+            <param-value>exportResults</param-value>
+        </init-param>
+        <init-param>
+            <param-name>PageClass</param-name>
+            <param-value>com.endinfosys.voyager.webvoyage.pages.ExportResultsPage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XSLTemplateName</param-name>
+            <param-value>multiple</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Custom</param-name>
+            <param-value>webvoyage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Internal</param-name>
+            <param-value>internal</param-value>
+        </init-param>
+        <init-param>
+            <param-name>HelpPage</param-name>
+            <param-value>exportResults.html</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XService-BinaryMARCRecordService</param-name>
+            <param-value>BinaryMARCRecordService,com.endinfosys.voyager.webvoyage.xservice.GenericXService</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet>
+        <display-name>CallNumberServlet</display-name>
+        <servlet-name>CallNumberServlet</servlet-name>
+        <servlet-class>
+            com.endinfosys.voyager.webvoyage.servlet.PageServlet
+        </servlet-class>
+        <init-param>
+            <param-name>PageCode</param-name>
+            <param-value>searchResultsTitles</param-value>
+        </init-param>
+        <init-param>
+            <param-name>PageClass</param-name>
+            <param-value>com.endinfosys.voyager.webvoyage.pages.SearchResultsCallNumberPage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XSLTemplateName</param-name>
+            <param-value>resultsCallNumbers.xsl</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Custom</param-name>
+            <param-value>webvoyage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Internal</param-name>
+            <param-value>internal</param-value>
+        </init-param>
+        <init-param>
+            <param-name>HelpPage</param-name>
+            <param-value>searchResultsCallNumber.html</param-value>
+        </init-param>
+    </servlet>
+
+  <servlet>
+        <display-name>BrowseServlet</display-name>
+        <servlet-name>BrowseServlet</servlet-name>
+        <servlet-class>
+            com.endinfosys.voyager.webvoyage.servlet.PageServlet
+        </servlet-class>
+        <init-param>
+            <param-name>PageCode</param-name>
+            <param-value>searchResultsTitles</param-value>
+        </init-param>
+        <init-param>
+            <param-name>PageClass</param-name>
+            <param-value>com.endinfosys.voyager.webvoyage.pages.SearchCourseReserveAlphaResultsPage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XSLTemplateName</param-name>
+            <param-value>searchLinkedCourses.xsl</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Custom</param-name>
+            <param-value>webvoyage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Internal</param-name>
+            <param-value>internal</param-value>
+        </init-param>
+        <init-param>
+            <param-name>HelpPage</param-name>
+            <param-value>searchCourseReserveAlphaResults.html</param-value>
+        </init-param>
+    </servlet>
+
+  <servlet>
+        <display-name>HeadingsServlet</display-name>
+        <servlet-name>HeadingsServlet</servlet-name>
+        <servlet-class>
+            com.endinfosys.voyager.webvoyage.servlet.PageServlet
+        </servlet-class>
+        <init-param>
+            <param-name>PageCode</param-name>
+            <param-value>searchResultsTitles</param-value>
+        </init-param>
+        <init-param>
+            <param-name>PageClass</param-name>
+            <param-value>com.endinfosys.voyager.webvoyage.pages.SearchResultsHeadingsPage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XSLTemplateName</param-name>
+            <param-value>resultsHeadings.xsl</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Custom</param-name>
+            <param-value>webvoyage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Internal</param-name>
+            <param-value>internal</param-value>
+        </init-param>
+        <init-param>
+            <param-name>HelpPage</param-name>
+            <param-value>searchResultsHeadings.html</param-value>
+        </init-param>
+    </servlet>
+
+  <servlet>
+        <display-name>AuthorityInfoServlet</display-name>
+        <servlet-name>AuthorityInfoServlet</servlet-name>
+        <servlet-class>
+            com.endinfosys.voyager.webvoyage.servlet.PageServlet
+        </servlet-class>
+        <init-param>
+            <param-name>PageCode</param-name>
+            <param-value>authorityInfo</param-value>
+        </init-param>
+        <init-param>
+            <param-name>PageClass</param-name>
+            <param-value>com.endinfosys.voyager.webvoyage.pages.AuthorityInfoPage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XSLTemplateName</param-name>
+            <param-value>displayAuthorityRecord.xsl</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Custom</param-name>
+            <param-value>webvoyage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Internal</param-name>
+            <param-value>internal</param-value>
+        </init-param>
+        <init-param>
+            <param-name>HelpPage</param-name>
+            <param-value>authorityInfo.html</param-value>
+        </init-param>
+    </servlet>
+    <servlet>
+        <display-name>StaffViewAuthorityServlet</display-name>
+        <servlet-name>StaffViewAuthorityServlet</servlet-name>
+        <servlet-class>
+            com.endinfosys.voyager.webvoyage.servlet.PageServlet
+        </servlet-class>
+        <init-param>
+            <param-name>PageCode</param-name>
+            <param-value>staffViewAuthority</param-value>
+        </init-param>
+        <init-param>
+            <param-name>PageClass</param-name>
+            <param-value>com.endinfosys.voyager.webvoyage.pages.AuthorityInfoPage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XSLTemplateName</param-name>
+            <param-value>displayStaffAuthority.xsl</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Custom</param-name>
+            <param-value>webvoyage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Internal</param-name>
+            <param-value>internal</param-value>
+        </init-param>
+        <init-param>
+            <param-name>HelpPage</param-name>
+            <param-value>authorityInfo.html</param-value>
+        </init-param>
+    </servlet>
+
+  <servlet>
+        <display-name>HoldingsInfoServlet</display-name>
+        <servlet-name>HoldingsInfoServlet</servlet-name>
+        <servlet-class>
+            com.endinfosys.voyager.webvoyage.servlet.PageServlet
+        </servlet-class>
+        <init-param>
+            <param-name>PageCode</param-name>
+            <param-value>holdingsInfo</param-value>
+        </init-param>
+        <init-param>
+            <param-name>PageClass</param-name>
+            <param-value>com.endinfosys.voyager.webvoyage.pages.HoldingsInfoPage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XSLTemplateName</param-name>
+            <param-value>displayRecord.xsl</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Custom</param-name>
+            <param-value>webvoyage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Internal</param-name>
+            <param-value>internal</param-value>
+        </init-param>
+        <init-param>
+            <param-name>HelpPage</param-name>
+            <param-value>holdingsInfo.html</param-value>
+        </init-param>
+    </servlet>
+
+  <servlet>
+        <display-name>StaffViewServlet</display-name>
+        <servlet-name>StaffViewServlet</servlet-name>
+        <servlet-class>
+            com.endinfosys.voyager.webvoyage.servlet.PageServlet
+        </servlet-class>
+        <init-param>
+            <param-name>PageCode</param-name>
+            <param-value>staffView</param-value>
+        </init-param>
+        <init-param>
+            <param-name>PageClass</param-name>
+            <param-value>com.endinfosys.voyager.webvoyage.pages.HoldingsInfoPage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XSLTemplateName</param-name>
+            <param-value>displayStaff.xsl</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Custom</param-name>
+            <param-value>webvoyage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Internal</param-name>
+            <param-value>internal</param-value>
+        </init-param>
+        <init-param>
+            <param-name>HelpPage</param-name>
+            <param-value>staffView.html</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet>
+        <display-name>PersonalInformationServlet</display-name>
+        <servlet-name>PersonalInformationServlet</servlet-name>
+        <servlet-class>
+            com.endinfosys.voyager.webvoyage.servlet.PageServlet
+        </servlet-class>
+        <init-param>
+            <param-name>PageCode</param-name>
+            <param-value>personalInfo</param-value>
+        </init-param>
+        <init-param>
+            <param-name>PageClass</param-name>
+            <param-value>com.endinfosys.voyager.webvoyage.pages.PersonalInfoPage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XSLTemplateName</param-name>
+            <param-value>personalInfo.xsl</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XService-PersonalInfo</param-name>
+            <param-value>PersonalInfoService,com.endinfosys.voyager.webvoyage.xservice.PersonalInformationXService</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Custom</param-name>
+            <param-value>webvoyage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Internal</param-name>
+            <param-value>internal</param-value>
+        </init-param>
+        <init-param>
+            <param-name>HelpPage</param-name>
+            <param-value>myAccount.html#personalInformation</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet>
+        <display-name>MyAccountPageServlet</display-name>
+        <servlet-name>MyAccountPageServlet</servlet-name>
+        <servlet-class>
+            com.endinfosys.voyager.webvoyage.servlet.PageServlet
+        </servlet-class>
+        <init-param>
+            <param-name>PageCode</param-name>
+            <param-value>myAccount</param-value>
+        </init-param>
+        <init-param>
+            <param-name>PageClass</param-name>
+            <param-value>com.endinfosys.voyager.webvoyage.pages.MyAccountPage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XSLTemplateName</param-name>
+            <param-value>myAccount.xsl</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XService-MyAccount</param-name>
+            <param-value>MyAccountService,com.endinfosys.voyager.webvoyage.xservice.MyAccountXService</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Custom</param-name>
+            <param-value>webvoyage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Internal</param-name>
+            <param-value>internal</param-value>
+        </init-param>
+      <init-param>
+            <param-name>HelpPage</param-name>
+            <param-value>myAccount.html</param-value>
+        </init-param>
+      </servlet>
+
+    <servlet>
+        <display-name>MyListPageServlet</display-name>
+        <servlet-name>MyListPageServlet</servlet-name>
+        <servlet-class>
+            com.endinfosys.voyager.webvoyage.servlet.PageServlet
+        </servlet-class>
+        <init-param>
+            <param-name>PageCode</param-name>
+            <param-value>myListPage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>PageClass</param-name>
+            <param-value>com.endinfosys.voyager.webvoyage.pages.MyListPage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XSLTemplateName</param-name>
+            <param-value>resultsMyList.xsl</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XService-Bookbag</param-name>
+            <param-value>BookbagService,com.endinfosys.voyager.webvoyage.xservice.BookbagXService</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Custom</param-name>
+            <param-value>webvoyage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Internal</param-name>
+            <param-value>internal</param-value>
+        </init-param>
+        <init-param>
+            <param-name>HelpPage</param-name>
+            <param-value>myList.html</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet>
+        <display-name>ChangePinServlet</display-name>
+        <servlet-name>ChangePinServlet</servlet-name>
+        <servlet-class>
+            com.endinfosys.voyager.webvoyage.servlet.PageServlet
+        </servlet-class>
+        <init-param>
+            <param-name>PageCode</param-name>
+            <param-value>changePin</param-value>
+        </init-param>
+        <init-param>
+            <param-name>PageClass</param-name>
+            <param-value>com.endinfosys.voyager.webvoyage.pages.ChangePinPage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XSLTemplateName</param-name>
+            <param-value>changePin.xsl</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Custom</param-name>
+            <param-value>webvoyage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Internal</param-name>
+            <param-value>internal</param-value>
+        </init-param>
+        <init-param>
+            <param-name>HelpPage</param-name>
+            <param-value>changePin.html</param-value>
+        </init-param>
+    </servlet>
+
+   <servlet>
+        <display-name>SelectLocationServlet</display-name>
+        <servlet-name>SelectLocationServlet</servlet-name>
+        <servlet-class>
+            com.endinfosys.voyager.webvoyage.servlet.PageServlet
+        </servlet-class>
+        <init-param>
+            <param-name>PageCode</param-name>
+            <param-value>selectLocation</param-value>
+        </init-param>
+        <init-param>
+            <param-name>PageClass</param-name>
+            <param-value>com.endinfosys.voyager.webvoyage.pages.SelectLocationPage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XService-CourseReserveProperties</param-name>
+            <param-value>CourseReservePropertiesService,com.endinfosys.voyager.webvoyage.xservice.CourseReservePropertiesXService</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XSLTemplateName</param-name>
+            <param-value>courseReserveLocation.xsl</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Custom</param-name>
+            <param-value>webvoyage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Internal</param-name>
+            <param-value>internal</param-value>
+        </init-param>
+        <init-param>
+            <param-name>HelpPage</param-name>
+            <param-value>searchCourseReserveAlpha.html</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet>
+        <display-name>Login Servlet</display-name>
+        <servlet-name>LoginServlet</servlet-name>
+        <servlet-class>
+            com.endinfosys.voyager.webvoyage.servlet.PageServlet
+        </servlet-class>
+        <init-param>
+            <param-name>PageCode</param-name>
+            <param-value>logIn</param-value>
+        </init-param>
+        <init-param>
+            <param-name>PageClass</param-name>
+            <param-value>com.endinfosys.voyager.webvoyage.pages.LoginPage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XSLTemplateName</param-name>
+            <param-value>login.xsl</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Custom</param-name>
+            <param-value>webvoyage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Internal</param-name>
+            <param-value>internal</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XService-UBDatabases</param-name>
+            <param-value>GetUBSitesService,com.endinfosys.voyager.webvoyage.xservice.UBSitesXService</param-value>
+        </init-param>
+        <init-param>
+            <param-name>HelpPage</param-name>
+            <param-value>login.html</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet>
+        <display-name>Login Action Servlet</display-name>
+        <servlet-name>LoginAction</servlet-name>
+        <servlet-class>
+            com.endinfosys.voyager.webvoyage.servlet.LoginInternalActionServlet
+        </servlet-class>
+        <init-param>
+            <param-name>ActionClass</param-name>
+            <param-value>com.endinfosys.voyager.webvoyage.actions.LoginAction</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Custom</param-name>
+            <param-value>webvoyage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Internal</param-name>
+            <param-value>internal</param-value>
+        </init-param>
+        <init-param>
+            <param-name>DefaultSuccess</param-name>
+            <param-value>SearchBasicServlet</param-value>
+        </init-param>
+        <init-param>
+            <param-name>DefaultFailure</param-name>
+            <param-value>LoginServlet</param-value>
+        </init-param>
+        <init-param>
+            <param-name>DefaultRetry</param-name>
+            <param-value>LoginServlet</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XService-Login</param-name>
+            <param-value>AuthenticatePatronService,com.endinfosys.voyager.webvoyage.xservice.AuthenticatePatronXService</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XService-SearchPreferences</param-name>
+            <param-value>SearchPreferencesService,com.endinfosys.voyager.webvoyage.xservice.SearchPreferencesXService</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet>
+        <display-name>External Login Action Servlet</display-name>
+        <servlet-name>ExternalLoginAction</servlet-name>
+        <servlet-class>
+            com.endinfosys.voyager.webvoyage.servlet.LoginExternalActionServlet
+        </servlet-class>
+        <init-param>
+            <param-name>ActionClass</param-name>
+            <param-value>com.endinfosys.voyager.webvoyage.actions.LoginAction</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Custom</param-name>
+            <param-value>webvoyage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Internal</param-name>
+            <param-value>internal</param-value>
+        </init-param>
+        <init-param>
+            <param-name>DefaultSuccess</param-name>
+            <param-value>SearchBasicServlet</param-value>
+        </init-param>
+        <init-param>
+            <param-name>DefaultFailure</param-name>
+            <param-value>LoginServlet</param-value>
+        </init-param>
+        <init-param>
+            <param-name>DefaultRetry</param-name>
+            <param-value>LoginServlet</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XService-Login</param-name>
+            <param-value>AuthenticatePatronService,com.endinfosys.voyager.webvoyage.xservice.AuthenticatePatronXService</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XService-SearchPreferences</param-name>
+            <param-value>SearchPreferencesService,com.endinfosys.voyager.webvoyage.xservice.SearchPreferencesXService</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet>
+        <display-name>Logout Action Servlet</display-name>
+        <servlet-name>LogoutAction</servlet-name>
+        <servlet-class>
+            com.endinfosys.voyager.webvoyage.servlet.LogoutActionServlet
+        </servlet-class>
+        <init-param>
+            <param-name>ActionClass</param-name>
+            <param-value>com.endinfosys.voyager.webvoyage.actions.LogoutAction</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Custom</param-name>
+            <param-value>webvoyage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Internal</param-name>
+            <param-value>internal</param-value>
+        </init-param>
+        <init-param>
+            <param-name>DefaultSuccess</param-name>
+            <param-value>SearchBasicServlet</param-value>
+        </init-param>
+        <init-param>
+            <param-name>DefaultFailure</param-name>
+            <param-value>SearchBasicServlet</param-value>
+        </init-param>
+        <init-param>
+            <param-name>DefaultRetry</param-name>
+            <param-value>SearchBasicServlet</param-value>
+        </init-param>
+        <!-- none needed
+        <init-param>
+            <param-name>XService-Login</param-name>
+            <param-value>AuthenticatePatronService,com.endinfosys.voyager.webvoyage.xservice.AuthenticatePatronXService</param-value>
+        </init-param>
+        -->
+    </servlet>
+
+    <servlet>
+        <display-name>Exit Action Servlet</display-name>
+        <servlet-name>ExitAction</servlet-name>
+        <servlet-class>
+            com.endinfosys.voyager.webvoyage.servlet.ExitActionServlet
+        </servlet-class>
+        <init-param>
+            <param-name>ActionClass</param-name>
+            <param-value>com.endinfosys.voyager.webvoyage.actions.ExitAction</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Custom</param-name>
+            <param-value>webvoyage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Internal</param-name>
+            <param-value>internal</param-value>
+        </init-param>
+        <init-param>
+            <param-name>DefaultSuccess</param-name>
+            <param-value>SearchBasicServlet</param-value>
+        </init-param>
+        <init-param>
+            <param-name>DefaultFailure</param-name>
+            <param-value>SearchBasicServlet</param-value>
+        </init-param>
+        <init-param>
+            <param-name>DefaultRetry</param-name>
+            <param-value>SearchBasicServlet</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet>
+        <display-name>MediaBookingConfServlet</display-name>
+        <servlet-name>MediaBookingConfServlet</servlet-name>
+        <servlet-class>
+            com.endinfosys.voyager.webvoyage.servlet.PageServlet
+        </servlet-class>
+        <init-param>
+            <param-name>PageCode</param-name>
+            <param-value>mediaBookingConf</param-value>
+        </init-param>
+        <init-param>
+            <param-name>PageClass</param-name>
+            <param-value>com.endinfosys.voyager.webvoyage.pages.MediaBookingConfPage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XSLTemplateName</param-name>
+            <param-value>sendRequest.xsl</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Custom</param-name>
+            <param-value>webvoyage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Internal</param-name>
+            <param-value>internal</param-value>
+        </init-param>
+        <init-param>
+            <param-name>HelpPage</param-name>
+            <param-value>patronRequest.html</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet>
+        <display-name>PatronRequestsServlet</display-name>
+        <servlet-name>PatronRequestsServlet</servlet-name>
+        <servlet-class>
+            com.endinfosys.voyager.webvoyage.servlet.PageServlet
+        </servlet-class>
+        <init-param>
+            <param-name>PageCode</param-name>
+            <param-value>patronRequests</param-value>
+        </init-param>
+        <init-param>
+            <param-name>PageClass</param-name>
+            <param-value>com.endinfosys.voyager.webvoyage.pages.PatronRequestsPage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XSLTemplateName</param-name>
+            <param-value>getAvailRequests.xsl</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Custom</param-name>
+            <param-value>webvoyage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Internal</param-name>
+            <param-value>internal</param-value>
+        </init-param>
+        <init-param>
+            <param-name>HelpPage</param-name>
+            <param-value>patronRequests.html</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XService-PatronRequests</param-name>
+            <param-value>PatronRequestsService,com.endinfosys.voyager.webvoyage.xservice.PatronRequestsXService</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet>
+        <display-name>PatronRequestServlet</display-name>
+        <servlet-name>PatronRequestServlet</servlet-name>
+        <servlet-class>
+            com.endinfosys.voyager.webvoyage.servlet.PageServlet
+        </servlet-class>
+        <init-param>
+            <param-name>PageCode</param-name>
+            <param-value>patronRequest</param-value>
+        </init-param>
+        <init-param>
+            <param-name>PageClass</param-name>
+            <param-value>com.endinfosys.voyager.webvoyage.pages.PatronRequestPage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XSLTemplateName</param-name>
+            <param-value>requestForms.xsl</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Custom</param-name>
+            <param-value>webvoyage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Internal</param-name>
+            <param-value>internal</param-value>
+        </init-param>
+        <init-param>
+            <param-name>HelpPage</param-name>
+            <param-value>patronRequest.html</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XService-PatronRequest</param-name>
+            <param-value>PatronRequestService,com.endinfosys.voyager.webvoyage.xservice.PatronRequestXService</param-value>
+        </init-param>
+    </servlet>
+
+
+    <servlet>
+        <display-name>MySearchesPage</display-name>
+        <servlet-name>MySearchesPage</servlet-name>
+        <servlet-class>
+            com.endinfosys.voyager.webvoyage.servlet.PageServlet
+        </servlet-class>
+        <init-param>
+            <param-name>PageCode</param-name>
+            <param-value>patronRequest</param-value>
+        </init-param>
+        <init-param>
+            <param-name>PageClass</param-name>
+            <param-value>com.endinfosys.voyager.webvoyage.pages.MySearchesPage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XSLTemplateName</param-name>
+            <param-value>searchMySearches.xsl</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Custom</param-name>
+            <param-value>webvoyage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Internal</param-name>
+            <param-value>internal</param-value>
+        </init-param>
+        <init-param>
+            <param-name>HelpPage</param-name>
+            <param-value>mySearch.html</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XService-SavedQueriesService</param-name>
+            <param-value>SavedQueriesService,com.endinfosys.voyager.webvoyage.xservice.SavedQueriesXService</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet>
+        <servlet-name>SelectLibrariesActionServlet</servlet-name>
+        <servlet-class>
+            com.endinfosys.voyager.webvoyage.servlet.SelectLibrariesActionServlet
+        </servlet-class>
+        <init-param>
+            <param-name>RedirectServletName</param-name>
+            <param-value>SearchBasicServlet</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet>
+        <display-name>Edit Preferences Action Servlet</display-name>
+        <servlet-name>EditPreferencesAction</servlet-name>
+        <servlet-class>
+            com.endinfosys.voyager.webvoyage.servlet.EditPreferencesActionServlet
+        </servlet-class>
+        <init-param>
+            <param-name>ActionClass</param-name>
+            <param-value>com.endinfosys.voyager.webvoyage.actions.EditPreferencesAction</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Custom</param-name>
+            <param-value>webvoyage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Internal</param-name>
+            <param-value>internal</param-value>
+        </init-param>
+        <init-param>
+            <param-name>DefaultSuccess</param-name>
+            <param-value>EditPreferencesServlet</param-value>
+        </init-param>
+        <init-param>
+            <param-name>DefaultFailure</param-name>
+            <param-value>EditPreferencesServlet</param-value>
+        </init-param>
+        <init-param>
+            <param-name>DefaultRetry</param-name>
+            <param-value>EditPreferencesServlet</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XService-SearchPreferences</param-name>
+            <param-value>SearchPreferencesService,com.endinfosys.voyager.webvoyage.xservice.SearchPreferencesXService</param-value>
+        </init-param>
+    </servlet>
+
+        <servlet>
+        <display-name>Update Personal Info Action Servlet</display-name>
+        <servlet-name>UpdatePersonalInfoAction</servlet-name>
+        <servlet-class>
+            com.endinfosys.voyager.webvoyage.servlet.UpdatePersonalInfoActionServlet
+        </servlet-class>
+        <init-param>
+            <param-name>ActionClass</param-name>
+            <param-value>com.endinfosys.voyager.webvoyage.actions.UpdatePersonalInfoAction</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Custom</param-name>
+            <param-value>webvoyage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Internal</param-name>
+            <param-value>internal</param-value>
+        </init-param>
+        <init-param>
+            <param-name>DefaultSuccess</param-name>
+            <param-value>PersonalInformationServlet</param-value>
+        </init-param>
+        <init-param>
+            <param-name>DefaultFailure</param-name>
+            <param-value>PersonalInformationServlet</param-value>
+        </init-param>
+        <init-param>
+            <param-name>DefaultRetry</param-name>
+            <param-value>PersonalInformationServlet</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XService-UpdatePersonalInfo</param-name>
+            <param-value>UpdatePersonalInfoService,com.endinfosys.voyager.webvoyage.xservice.UpdatePersonalInfoXService</param-value>
+        </init-param>
+    </servlet>
+
+
+    <servlet>
+        <display-name>Change Pin Action Servlet</display-name>
+        <servlet-name>ChangePinAction</servlet-name>
+        <servlet-class>
+            com.endinfosys.voyager.webvoyage.servlet.ChangePinActionServlet
+        </servlet-class>
+        <init-param>
+            <param-name>ActionClass</param-name>
+            <param-value>com.endinfosys.voyager.webvoyage.actions.ChangePinAction</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Custom</param-name>
+            <param-value>webvoyage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Internal</param-name>
+            <param-value>internal</param-value>
+        </init-param>
+        <init-param>
+            <param-name>DefaultSuccess</param-name>
+            <param-value>ChangePinServlet</param-value>
+        </init-param>
+        <init-param>
+            <param-name>DefaultFailure</param-name>
+            <param-value>ChangePinServlet</param-value>
+        </init-param>
+        <init-param>
+            <param-name>DefaultRetry</param-name>
+            <param-value>ChangePinServlet</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XService-ForcePin</param-name>
+            <param-value>ForcePinService,com.endinfosys.voyager.webvoyage.xservice.ForcePinXService</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XService-ChangePIN</param-name>
+            <param-value>ChangePINService,com.endinfosys.voyager.webvoyage.xservice.ChangePinXService</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet>
+        <display-name>Cancel Action Servlet</display-name>
+        <servlet-name>CancelAction</servlet-name>
+        <servlet-class>
+            com.endinfosys.voyager.webvoyage.servlet.CancelActionServlet
+        </servlet-class>
+        <init-param>
+            <param-name>ActionClass</param-name>
+            <param-value>com.endinfosys.voyager.webvoyage.actions.CancelAction</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Custom</param-name>
+            <param-value>webvoyage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Internal</param-name>
+            <param-value>internal</param-value>
+        </init-param>
+        <init-param>
+            <param-name>DefaultSuccess</param-name>
+            <param-value>MyAccountPageServlet</param-value>
+        </init-param>
+        <init-param>
+            <param-name>DefaultFailure</param-name>
+            <param-value>MyAccountPageServlet</param-value>
+        </init-param>
+        <init-param>
+            <param-name>DefaultRetry</param-name>
+            <param-value>MyAccountPageServlet</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XService-Cancel</param-name>
+            <param-value>CancelService,com.endinfosys.voyager.webvoyage.xservice.CancelXService</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet>
+        <display-name>Renew Action Servlet</display-name>
+        <servlet-name>RenewAction</servlet-name>
+        <servlet-class>
+            com.endinfosys.voyager.webvoyage.servlet.RenewActionServlet
+        </servlet-class>
+        <init-param>
+            <param-name>ActionClass</param-name>
+            <param-value>com.endinfosys.voyager.webvoyage.actions.RenewAction</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Custom</param-name>
+            <param-value>webvoyage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Internal</param-name>
+            <param-value>internal</param-value>
+        </init-param>
+        <init-param>
+            <param-name>DefaultSuccess</param-name>
+            <param-value>MyAccountPageServlet</param-value>
+        </init-param>
+        <init-param>
+            <param-name>DefaultFailure</param-name>
+            <param-value>MyAccountPageServlet</param-value>
+        </init-param>
+        <init-param>
+            <param-name>DefaultRetry</param-name>
+            <param-value>MyAccountPageServlet</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XService-Renew</param-name>
+            <param-value>RenewService,com.endinfosys.voyager.webvoyage.xservice.RenewXService</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet>
+        <display-name>Search Status Action Servlet</display-name>
+        <servlet-name>SearchStatusActionServlet</servlet-name>
+        <servlet-class>
+            com.endinfosys.voyager.webvoyage.servlet.SearchStatusActionServlet
+        </servlet-class>
+        <init-param>
+            <param-name>ActionClass</param-name>
+            <param-value>com.endinfosys.voyager.webvoyage.actions.SearchStatusAction</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Custom</param-name>
+            <param-value>webvoyage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Internal</param-name>
+            <param-value>internal</param-value>
+        </init-param>
+        <init-param>
+            <param-name>DefaultSuccess</param-name>
+            <param-value>SearchStatusServlet</param-value>
+        </init-param>
+        <init-param>
+            <param-name>DefaultFailure</param-name>
+            <param-value>SearchStatusServlet</param-value>
+        </init-param>
+        <init-param>
+            <param-name>DefaultRetry</param-name>
+            <param-value>SearchStatusServlet</param-value>
+        </init-param>
+        <init-param>
+             <param-name>StatusResults</param-name>
+             <param-value>SearchStatusServlet</param-value>
+        </init-param>
+        <init-param>
+             <param-name>SearchResults</param-name>
+             <param-value>SearchResultsAction</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet>
+        <display-name>Search Stop Action Servlet</display-name>
+        <servlet-name>SearchStopAction</servlet-name>
+        <servlet-class>
+            com.endinfosys.voyager.webvoyage.servlet.SearchStopActionServlet
+        </servlet-class>
+        <init-param>
+            <param-name>ActionClass</param-name>
+            <param-value>com.endinfosys.voyager.webvoyage.actions.SearchStopAction</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Custom</param-name>
+            <param-value>webvoyage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Internal</param-name>
+            <param-value>internal</param-value>
+        </init-param>
+        <init-param>
+            <param-name>DefaultSuccess</param-name>
+            <param-value>SearchStatusServlet</param-value>
+        </init-param>
+        <init-param>
+            <param-name>DefaultFailure</param-name>
+            <param-value>SearchStatusServlet</param-value>
+        </init-param>
+        <init-param>
+            <param-name>DefaultRetry</param-name>
+            <param-value>SearchStatusServlet</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet>
+        <display-name>Enter Course Reserve Action Servlet</display-name>
+        <servlet-name>EnterCourseReserveAction</servlet-name>
+        <servlet-class>
+            com.endinfosys.voyager.webvoyage.servlet.EnterCourseReserveActionServlet
+        </servlet-class>
+        <init-param>
+            <param-name>ActionClass</param-name>
+            <param-value>com.endinfosys.voyager.webvoyage.actions.EnterCourseReserveAction</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Custom</param-name>
+            <param-value>webvoyage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Internal</param-name>
+            <param-value>internal</param-value>
+        </init-param>
+        <init-param>
+            <param-name>DefaultSuccess</param-name>
+            <param-value>SearchBasicServlet</param-value>
+        </init-param>
+        <init-param>
+            <param-name>DefaultFailure</param-name>
+            <param-value>SearchBasicServlet</param-value>
+        </init-param>
+        <init-param>
+            <param-name>DefaultRetry</param-name>
+            <param-value>SearchBasicServlet</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XService-CourseReserveProperties</param-name>
+            <param-value>CourseReservePropertiesService,com.endinfosys.voyager.webvoyage.xservice.CourseReservePropertiesXService</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet>
+        <display-name>Enter Select Location Action Servlet</display-name>
+        <servlet-name>EnterSelectLocationAction</servlet-name>
+        <servlet-class>
+            com.endinfosys.voyager.webvoyage.servlet.EnterSelectLocationActionServlet
+        </servlet-class>
+        <init-param>
+            <param-name>ActionClass</param-name>
+            <param-value>com.endinfosys.voyager.webvoyage.actions.EnterSelectLocationAction</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Custom</param-name>
+            <param-value>webvoyage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Internal</param-name>
+            <param-value>internal</param-value>
+        </init-param>
+        <init-param>
+            <param-name>DefaultSuccess</param-name>
+            <param-value>SearchCourseReserveDataServlet</param-value>
+        </init-param>
+        <init-param>
+            <param-name>DefaultFailure</param-name>
+            <param-value>SearchCourseReserveDataServlet</param-value>
+        </init-param>
+        <init-param>
+            <param-name>DefaultRetry</param-name>
+            <param-value>SearchCourseReserveDataServlet</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XService-CourseReserveProperties</param-name>
+            <param-value>CourseReservePropertiesService,com.endinfosys.voyager.webvoyage.xservice.CourseReservePropertiesXService</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet>
+        <display-name>Select Location Action Servlet</display-name>
+        <servlet-name>SelectLocationAction</servlet-name>
+        <servlet-class>
+            com.endinfosys.voyager.webvoyage.servlet.SelectLocationActionServlet
+        </servlet-class>
+        <init-param>
+            <param-name>ActionClass</param-name>
+            <param-value>com.endinfosys.voyager.webvoyage.actions.SelectLocationAction</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Custom</param-name>
+            <param-value>webvoyage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Internal</param-name>
+            <param-value>internal</param-value>
+        </init-param>
+        <init-param>
+            <param-name>DefaultSuccess</param-name>
+            <param-value>SearchCourseReserveDataPageServlet</param-value>
+        </init-param>
+        <init-param>
+            <param-name>DefaultFailure</param-name>
+            <param-value>SelectLocationServlet</param-value>
+        </init-param>
+        <init-param>
+            <param-name>DefaultRetry</param-name>
+            <param-value>SelectLocationServlet</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XService-CourseReserveProperties</param-name>
+            <param-value>CourseReservePropertiesService,com.endinfosys.voyager.webvoyage.xservice.CourseReservePropertiesXService</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet>
+        <display-name>Select Database Action Servlet</display-name>
+        <servlet-name>SelectDatabaseAction</servlet-name>
+        <servlet-class>
+            com.endinfosys.voyager.webvoyage.servlet.SelectDatabaseActionServlet
+        </servlet-class>
+        <init-param>
+            <param-name>ActionClass</param-name>
+            <param-value>com.endinfosys.voyager.webvoyage.actions.SelectDatabaseAction</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Custom</param-name>
+            <param-value>webvoyage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Internal</param-name>
+            <param-value>internal</param-value>
+        </init-param>
+        <init-param>
+            <param-name>DefaultSuccess</param-name>
+            <param-value>SearchBasicServlet</param-value>
+        </init-param>
+        <init-param>
+            <param-name>DefaultFailure</param-name>
+            <param-value>SelectDatabaseServlet</param-value>
+        </init-param>
+        <init-param>
+            <param-name>DefaultRetry</param-name>
+            <param-value>SelectDatabaseServlet</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet>
+        <display-name>Email Action Servlet</display-name>
+        <servlet-name>EmailAction</servlet-name>
+        <servlet-class>
+            com.endinfosys.voyager.webvoyage.servlet.EmailActionServlet
+        </servlet-class>
+        <init-param>
+            <param-name>ActionClass</param-name>
+            <param-value>com.endinfosys.voyager.webvoyage.actions.EmailAction</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Custom</param-name>
+            <param-value>webvoyage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Internal</param-name>
+            <param-value>internal</param-value>
+        </init-param>
+        <init-param>
+            <param-name>DefaultSuccess</param-name>
+            <param-value>EmailCompleteServlet</param-value>
+        </init-param>
+        <init-param>
+            <param-name>DefaultFailure</param-name>
+            <param-value>EmailDialogServlet</param-value>
+        </init-param>
+        <init-param>
+            <param-name>DefaultRetry</param-name>
+            <param-value>EmailDialogServlet</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet>
+        <display-name>Search Action Servlet</display-name>
+        <servlet-name>SearchServlet</servlet-name>
+        <servlet-class>
+            com.endinfosys.voyager.webvoyage.servlet.SearchActionServlet
+        </servlet-class>
+        <init-param>
+            <param-name>ActionClass</param-name>
+            <param-value>com.endinfosys.voyager.webvoyage.actions.SearchAction</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Custom</param-name>
+            <param-value>webvoyage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Internal</param-name>
+            <param-value>internal</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-MapSearch</param-name>
+            <param-value>mapSearch</param-value>
+        </init-param>
+        <init-param>
+            <param-name>DefaultSuccess</param-name>
+            <param-value>SearchResultsAction</param-value>
+        </init-param>
+        <init-param>
+            <param-name>DefaultFailure</param-name>
+            <param-value>SearchBasicServlet</param-value>
+        </init-param>
+        <init-param>
+            <param-name>DefaultRetry</param-name>
+            <param-value>SearchBasicServlet</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet>
+        <display-name>Search Action Servlet</display-name>
+        <servlet-name>SearchResultsAction</servlet-name>
+        <servlet-class>
+            com.endinfosys.voyager.webvoyage.servlet.SearchResultsActionServlet
+        </servlet-class>
+        <init-param>
+             <param-name>AuthorityResults</param-name>
+             <param-value>AuthorityInfoServlet</param-value>
+        </init-param>
+        <init-param>
+            <param-name>ActionClass</param-name>
+            <param-value>com.endinfosys.voyager.webvoyage.actions.SearchResultsAction</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Custom</param-name>
+            <param-value>webvoyage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Internal</param-name>
+            <param-value>internal</param-value>
+        </init-param>
+        <init-param>
+             <param-name>TitlesResults</param-name>
+             <param-value>TitlesServlet</param-value>
+        </init-param>
+        <init-param>
+             <param-name>HeadingsResults</param-name>
+             <param-value>HeadingsServlet</param-value>
+        </init-param>
+        <init-param>
+             <param-name>HoldingsResults</param-name>
+             <param-value>HoldingsInfoServlet</param-value>
+        </init-param>
+        <init-param>
+             <param-name>StatusResults</param-name>
+             <param-value>SearchStatusServlet</param-value>
+        </init-param>
+        <init-param>
+             <param-name>CallNumberResults</param-name>
+             <param-value>CallNumberServlet</param-value>
+        </init-param>
+        <init-param>
+             <param-name>BrowseResults</param-name>
+             <param-value>BrowseServlet</param-value>
+        </init-param>
+        <init-param>
+            <param-name>DefaultSuccess</param-name>
+            <param-value>SearchResultsAction</param-value>
+        </init-param>
+        <init-param>
+            <param-name>DefaultFailure</param-name>
+            <param-value>SearchBasicServlet</param-value>
+        </init-param>
+        <init-param>
+            <param-name>DefaultRetry</param-name>
+            <param-value>SearchBasicServlet</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet>
+        <display-name>Send Patron Request Action Servlet</display-name>
+        <servlet-name>SendPatronRequestAction</servlet-name>
+        <servlet-class>
+            com.endinfosys.voyager.webvoyage.servlet.SendPatronRequestActionServlet
+        </servlet-class>
+        <init-param>
+            <param-name>ActionClass</param-name>
+            <param-value>com.endinfosys.voyager.webvoyage.actions.SendPatronRequestAction</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Custom</param-name>
+            <param-value>webvoyage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Internal</param-name>
+            <param-value>internal</param-value>
+        </init-param>
+        <init-param>
+            <param-name>DefaultSuccess</param-name>
+            <param-value>HoldingsInfoServlet</param-value>
+        </init-param>
+        <init-param>
+            <param-name>DefaultFailure</param-name>
+            <param-value>HoldingsInfoServlet</param-value>
+        </init-param>
+        <init-param>
+            <param-name>DefaultRetry</param-name>
+            <param-value>PatronRequestServlet</param-value>
+        </init-param>
+        <init-param>
+            <param-name>DefaultSuccessNoBib</param-name>
+            <param-value>PatronRequestsServlet</param-value>
+        </init-param>
+        <init-param>
+            <param-name>DefaultFailureNoBib</param-name>
+            <param-value>PatronRequestsServlet</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XService-SendPatronRequest</param-name>
+            <param-value>SendPatronRequestService,com.endinfosys.voyager.webvoyage.xservice.SendPatronRequestXService</param-value>
+        </init-param>
+    </servlet>
+
+   <!-- Retain Selected Checkboxes for Titles -->
+   <servlet>
+        <display-name>Select Titles Action Servlet</display-name>
+        <servlet-name>SelectTitlesActionServlet</servlet-name>
+        <servlet-class>
+            com.endinfosys.voyager.webvoyage.servlet.SelectTitlesActionServlet
+        </servlet-class>
+        <init-param>
+            <param-name>ActionClass</param-name>
+            <param-value>com.endinfosys.voyager.webvoyage.actions.SelectTitlesAction</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Custom</param-name>
+            <param-value>webvoyage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Internal</param-name>
+            <param-value>internal</param-value>
+        </init-param>
+        <init-param>
+            <param-name>DefaultSuccess</param-name>
+            <param-value>none</param-value>
+        </init-param>
+        <init-param>
+            <param-name>DefaultFailure</param-name>
+            <param-value>none</param-value>
+        </init-param>
+        <init-param>
+            <param-name>DefaultRetry</param-name>
+            <param-value>none</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet>
+        <display-name>Titles Action Servlet</display-name>
+        <servlet-name>TitlesActionServlet</servlet-name>
+        <servlet-class>
+            com.endinfosys.voyager.webvoyage.servlet.TitlesActionServlet
+        </servlet-class>
+        <init-param>
+            <param-name>ActionClass</param-name>
+            <param-value>com.endinfosys.voyager.webvoyage.actions.TitlesAction</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Custom</param-name>
+            <param-value>webvoyage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Internal</param-name>
+            <param-value>internal</param-value>
+        </init-param>
+        <!-- define these init-params so the framework is happy, but
+            this servlet will ignore the values
+         -->
+        <init-param>
+            <param-name>DefaultSuccess</param-name>
+            <param-value>none</param-value>
+        </init-param>
+        <init-param>
+            <param-name>DefaultFailure</param-name>
+            <param-value>none</param-value>
+        </init-param>
+        <init-param>
+            <param-name>DefaultRetry</param-name>
+            <param-value>none</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet>
+        <display-name>MyAccount Action Servlet</display-name>
+        <servlet-name>MyAccountActionServlet</servlet-name>
+        <servlet-class>
+            com.endinfosys.voyager.webvoyage.servlet.MyAccountActionServlet
+        </servlet-class>
+        <init-param>
+            <param-name>ActionClass</param-name>
+            <param-value>com.endinfosys.voyager.webvoyage.actions.MyAccountAction</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Custom</param-name>
+            <param-value>webvoyage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Internal</param-name>
+            <param-value>internal</param-value>
+        </init-param>
+        <init-param>
+            <param-name>DefaultSuccess</param-name>
+            <param-value>MyAccountPageServlet</param-value>
+        </init-param>
+        <init-param>
+            <param-name>DefaultFailure</param-name>
+            <param-value>MyAccountPageServlet</param-value>
+        </init-param>
+        <init-param>
+            <param-name>DefaultRetry</param-name>
+            <param-value>MyAccountPageServlet</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet>
+        <display-name>MediaDeliveryLoc Action Servlet</display-name>
+        <servlet-name>MediaDeliveryLocAction</servlet-name>
+        <servlet-class>
+            com.endinfosys.voyager.webvoyage.servlet.MediaDeliveryLocActionServlet
+        </servlet-class>
+        <init-param>
+            <param-name>ActionClass</param-name>
+            <param-value>com.endinfosys.voyager.webvoyage.actions.AjaxAction</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Custom</param-name>
+            <param-value>webvoyage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Internal</param-name>
+            <param-value>internal</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XService-MediaDeliveryLocs</param-name>
+            <param-value>MediaDeliveryLocService,com.endinfosys.voyager.webvoyage.xservice.MediaDeliveryLocXService</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet>
+        <display-name>MediaItem Action Servlet</display-name>
+        <servlet-name>MediaItemAction</servlet-name>
+        <servlet-class>
+            com.endinfosys.voyager.webvoyage.servlet.MediaItemActionServlet
+        </servlet-class>
+        <init-param>
+            <param-name>ActionClass</param-name>
+            <param-value>com.endinfosys.voyager.webvoyage.actions.AjaxAction</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Custom</param-name>
+            <param-value>webvoyage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Internal</param-name>
+            <param-value>internal</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XService-MediaItems</param-name>
+            <param-value>MediaItemService,com.endinfosys.voyager.webvoyage.xservice.MediaItemXService</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet>
+        <display-name>MediaValidateEquipment Action Servlet</display-name>
+        <servlet-name>MediaValidateEquipmentAction</servlet-name>
+        <servlet-class>
+            com.endinfosys.voyager.webvoyage.servlet.MediaValidateEquipmentActionServlet
+        </servlet-class>
+        <init-param>
+            <param-name>ActionClass</param-name>
+            <param-value>com.endinfosys.voyager.webvoyage.actions.AjaxAction</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Custom</param-name>
+            <param-value>webvoyage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Internal</param-name>
+            <param-value>internal</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XService-MediaValidateEquipment</param-name>
+            <param-value>MediaValidateEquipmentService,com.endinfosys.voyager.webvoyage.xservice.MediaValidateEquipmentXService</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet>
+        <display-name>MediaValidateItem Action Servlet</display-name>
+        <servlet-name>MediaValidateItemAction</servlet-name>
+        <servlet-class>
+            com.endinfosys.voyager.webvoyage.servlet.MediaValidateItemActionServlet
+        </servlet-class>
+        <init-param>
+            <param-name>ActionClass</param-name>
+            <param-value>com.endinfosys.voyager.webvoyage.actions.AjaxAction</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Custom</param-name>
+            <param-value>webvoyage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Internal</param-name>
+            <param-value>internal</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XService-MediaValidateItem</param-name>
+            <param-value>MediaValidateItemService,com.endinfosys.voyager.webvoyage.xservice.MediaValidateItemXService</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet>
+        <display-name>ShortLoanDates Action Servlet</display-name>
+        <servlet-name>ShortLoanDatesAction</servlet-name>
+        <servlet-class>
+            com.endinfosys.voyager.webvoyage.servlet.ShortLoanDatesActionServlet
+        </servlet-class>
+        <init-param>
+            <param-name>ActionClass</param-name>
+            <param-value>com.endinfosys.voyager.webvoyage.actions.AjaxAction</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Custom</param-name>
+            <param-value>webvoyage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Internal</param-name>
+            <param-value>internal</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XService-ShortLoanDates</param-name>
+            <param-value>ShortLoanDatesService,com.endinfosys.voyager.webvoyage.xservice.ShortLoanDatesXService</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet>
+        <display-name>UBHoldingsLocation Action Servlet</display-name>
+        <servlet-name>UBHoldingsLocationAction</servlet-name>
+        <servlet-class>
+            com.endinfosys.voyager.webvoyage.servlet.UBHoldingsLocationActionServlet
+        </servlet-class>
+        <init-param>
+            <param-name>ActionClass</param-name>
+            <param-value>com.endinfosys.voyager.webvoyage.actions.AjaxAction</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Custom</param-name>
+            <param-value>webvoyage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Internal</param-name>
+            <param-value>internal</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XService-UBHoldingsLib</param-name>
+            <param-value>UBHoldingsLibService,com.endinfosys.voyager.webvoyage.xservice.UBHoldingsLibXService</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet>
+        <display-name>UBPickupLocation Action Servlet</display-name>
+        <servlet-name>UBPickupLocationAction</servlet-name>
+        <servlet-class>
+            com.endinfosys.voyager.webvoyage.servlet.UBPickupLocationActionServlet
+        </servlet-class>
+        <init-param>
+            <param-name>ActionClass</param-name>
+            <param-value>com.endinfosys.voyager.webvoyage.actions.AjaxAction</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Custom</param-name>
+            <param-value>webvoyage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Internal</param-name>
+            <param-value>internal</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XService-UBPickupLib</param-name>
+            <param-value>UBPickupLibService,com.endinfosys.voyager.webvoyage.xservice.UBPickupLibXService</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet>
+        <display-name> Action Servlet</display-name>
+        <servlet-name>SaveSearchAddServlet</servlet-name>
+        <servlet-class>
+            com.endinfosys.voyager.webvoyage.servlet.SaveSearchAddActionServlet
+        </servlet-class>
+        <init-param>
+            <param-name>ActionClass</param-name>
+            <param-value>com.endinfosys.voyager.webvoyage.actions.SaveSearchAddAction</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Custom</param-name>
+            <param-value>webvoyage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Internal</param-name>
+            <param-value>internal</param-value>
+        </init-param>
+        <init-param>
+            <param-name>DefaultSuccess</param-name>
+            <param-value>returnUrl</param-value>
+        </init-param>
+        <init-param>
+            <param-name>DefaultFailure</param-name>
+            <param-value>returnUrl</param-value>
+        </init-param>
+        <init-param>
+            <param-name>DefaultRetry</param-name>
+            <param-value>returnUrl</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XService-SavedQueriesService</param-name>
+            <param-value>SavedQueriesService</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet>
+        <display-name> Action Servlet</display-name>
+        <servlet-name>SaveSearchAlertAddServlet</servlet-name>
+        <servlet-class>
+            com.endinfosys.voyager.webvoyage.servlet.ActionServlet
+        </servlet-class>
+        <init-param>
+            <param-name>ActionClass</param-name>
+            <!-- this uses the same code just goes to a different page -->
+            <param-value>com.endinfosys.voyager.webvoyage.actions.SaveSearchAddAction</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Custom</param-name>
+            <param-value>webvoyage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Internal</param-name>
+            <param-value>internal</param-value>
+        </init-param>
+        <init-param>
+            <param-name>DefaultSuccess</param-name>
+            <param-value>MySearchesPage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>DefaultFailure</param-name>
+            <param-value>MySearchesPage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>DefaultRetry</param-name>
+            <param-value>MySearchesPage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XService-SavedQueriesService</param-name>
+            <param-value>SavedQueriesService</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet>
+        <display-name> Action Servlet</display-name>
+        <servlet-name>DeleteSavedSearchServlet</servlet-name>
+        <servlet-class>
+            com.endinfosys.voyager.webvoyage.servlet.ActionServlet
+        </servlet-class>
+        <init-param>
+            <param-name>ActionClass</param-name>
+            <param-value>com.endinfosys.voyager.webvoyage.actions.SaveSearchDeleteAction</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Custom</param-name>
+            <param-value>webvoyage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Internal</param-name>
+            <param-value>internal</param-value>
+        </init-param>
+        <init-param>
+            <param-name>DefaultSuccess</param-name>
+            <param-value>MySearchesPage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>DefaultFailure</param-name>
+            <param-value>MySearchesPage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>DefaultRetry</param-name>
+            <param-value>MySearchesPage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XService-SavedQueriesService</param-name>
+            <param-value>SavedQueriesService</param-value>
+        </init-param>
+    </servlet>
+
+
+    <servlet>
+        <display-name>MySearchesFormServlet</display-name>
+        <servlet-name>MySearchesFormServlet</servlet-name>
+        <servlet-class>
+            com.endinfosys.voyager.webvoyage.servlet.MySearchesServlet
+        </servlet-class>
+        <init-param>
+            <param-name>ActionClass</param-name>
+            <param-value>com.endinfosys.voyager.webvoyage.actions.SaveSearchAlertsAction</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Custom</param-name>
+            <param-value>webvoyage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Internal</param-name>
+            <param-value>internal</param-value>
+        </init-param>
+        <init-param>
+            <param-name>DefaultSuccess</param-name>
+            <param-value>MySearchesPage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>DefaultFailure</param-name>
+            <param-value>MySearchesPage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>DefaultRetry</param-name>
+            <param-value>MySearchesPage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>XService-SavedQueriesService</param-name>
+            <param-value>SavedQueriesService</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet>
+        <display-name> Action Servlet</display-name>
+        <servlet-name>CombineSearchesServlet</servlet-name>
+        <servlet-class>
+            com.endinfosys.voyager.webvoyage.servlet.CombineSearchesServlet
+        </servlet-class>
+        <init-param>
+            <param-name>ActionClass</param-name>
+            <param-value>com.endinfosys.voyager.webvoyage.actions.CombineSearchesAction</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Custom</param-name>
+            <param-value>webvoyage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Internal</param-name>
+            <param-value>internal</param-value>
+        </init-param>
+        <init-param>
+            <param-name>DefaultSuccess</param-name>
+            <param-value>search</param-value>
+        </init-param>
+        <init-param>
+            <param-name>DefaultFailure</param-name>
+            <param-value>SearchHistoryServlet</param-value>
+        </init-param>
+        <init-param>
+            <param-name>DefaultRetry</param-name>
+            <param-value>SearchHistoryServlet</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet>
+      <display-name>Session Configuration</display-name>
+      <servlet-name>SessionConfigServlet</servlet-name>
+      <servlet-class>com.endinfosys.voyager.webvoyage.servlet.SessionConfigServlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <display-name>Get Authenticated Scan Doc Action Servlet</display-name>
+        <servlet-name>GetAuthScanDocAction</servlet-name>
+        <servlet-class>
+            com.endinfosys.voyager.webvoyage.servlet.GetAuthScanDocActionServlet
+        </servlet-class>
+        <init-param>
+            <param-name>ActionClass</param-name>
+            <param-value>com.endinfosys.voyager.webvoyage.actions.GetAuthScanDocAction</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Custom</param-name>
+            <param-value>webvoyage</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Internal</param-name>
+            <param-value>internal</param-value>
+        </init-param>
+        <init-param>
+            <param-name>DefaultSuccess</param-name>
+            <param-value>returnUrl</param-value>
+        </init-param>
+        <init-param>
+            <param-name>DefaultFailure</param-name>
+            <param-value>returnUrl</param-value>
+        </init-param>
+        <init-param>
+            <param-name>DefaultRetry</param-name>
+            <param-value>returnUrl</param-value>
+        </init-param>
+    </servlet>
+
+      <servlet>
+        <display-name>GetLinkResolverActionServlet</display-name>
+        <servlet-name>GetLinkResolverActionServlet</servlet-name>
+        <servlet-class>
+            com.endinfosys.voyager.webvoyage.servlet.GetLinkResolverActionServlet
+        </servlet-class>
+        <init-param>
+            <param-name>ActionClass</param-name>
+            <param-value>com.endinfosys.voyager.webvoyage.actions.GetLinkResolverAction</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Custom</param-name>
+            <param-value>linkresolver</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Properties-Internal</param-name>
+            <param-value>internal</param-value>
+        </init-param>
+        <init-param>
+            <param-name>DefaultSuccess</param-name>
+            <param-value>returnUrl</param-value>
+        </init-param>
+        <init-param>
+            <param-name>DefaultFailure</param-name>
+            <param-value>returnUrl</param-value>
+        </init-param>
+        <init-param>
+            <param-name>DefaultRetry</param-name>
+            <param-value>returnUrl</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>SelectDatabaseServlet</servlet-name>
+        <url-pattern>/selectDatabase/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>SearchBasicServlet</servlet-name>
+        <url-pattern>/searchBasic/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>SearchHistoryServlet</servlet-name>
+        <url-pattern>/searchHistory/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>EmailDialogServlet</servlet-name>
+        <url-pattern>/emailDialog/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>EmailAuthDialogServlet</servlet-name>
+        <url-pattern>/emailAuthDialog/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>EmailCompleteServlet</servlet-name>
+        <url-pattern>/emailComplete/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>SelectLibrariesActionServlet</servlet-name>
+        <url-pattern>/selectLibraries/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>SearchSubjectServlet</servlet-name>
+        <url-pattern>/searchSubject/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>SearchAdvancedServlet</servlet-name>
+        <url-pattern>/searchAdvanced/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>SearchAuthorServlet</servlet-name>
+        <url-pattern>/searchAuthor/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>SearchCourseReserveDataServlet</servlet-name>
+        <url-pattern>/searchCourseReserveData/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>SearchCourseReserveAlphaServlet</servlet-name>
+        <url-pattern>/searchCourseReserveAlpha/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>SearchStatusServlet</servlet-name>
+        <url-pattern>/searchStatus/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>EditPreferencesServlet</servlet-name>
+        <url-pattern>/editPreferences/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>PersonalInformationServlet</servlet-name>
+        <url-pattern>/personalInformation/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>MyAccountPageServlet</servlet-name>
+        <url-pattern>/myAccount/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>SelectLocationServlet</servlet-name>
+        <url-pattern>/selectLocation/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>ChangePinServlet</servlet-name>
+        <url-pattern>/changePin/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>LoginServlet</servlet-name>
+        <url-pattern>/login</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>LoginAction</servlet-name>
+        <url-pattern>/login.do</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>ExternalLoginAction</servlet-name>
+        <url-pattern>/externalLogin.do</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>LogoutAction</servlet-name>
+        <url-pattern>/logout.do</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>EditPreferencesAction</servlet-name>
+        <url-pattern>/editPreferences.do</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>ExitAction</servlet-name>
+        <url-pattern>/exit.do</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>ChangePinAction</servlet-name>
+        <url-pattern>/changePIN.do</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>UpdatePersonalInfoAction</servlet-name>
+        <url-pattern>/changeSMSNumber.do</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>EnterCourseReserveAction</servlet-name>
+        <url-pattern>/enterCourseReserve.do</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>EnterSelectLocationAction</servlet-name>
+        <url-pattern>/enterSelectLocation.do</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>SelectLocationAction</servlet-name>
+        <url-pattern>/selectLocation.do</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>SearchStatusActionServlet</servlet-name>
+        <url-pattern>/searchStatus.do</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>SearchStopAction</servlet-name>
+        <url-pattern>/searchStop.do</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>SelectDatabaseAction</servlet-name>
+        <url-pattern>/selectDatabase.do</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>SearchServlet</servlet-name>
+        <url-pattern>/search</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>TitlesServlet</servlet-name>
+        <url-pattern>/titles/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>CallNumberServlet</servlet-name>
+        <url-pattern>/callNumber/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>BrowseServlet</servlet-name>
+        <url-pattern>/searchCourseReserveAlphaResults/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>HeadingsServlet</servlet-name>
+        <url-pattern>/headings/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>SearchResultsAction</servlet-name>
+        <url-pattern>/searchResults</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>AuthorityInfoServlet</servlet-name>
+        <url-pattern>/authorityInfo/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>HoldingsInfoServlet</servlet-name>
+        <url-pattern>/holdingsInfo/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>StaffViewServlet</servlet-name>
+        <url-pattern>/staffView/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>StaffViewAuthorityServlet</servlet-name>
+        <url-pattern>/staffViewAuthority/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>PrintDialogServlet</servlet-name>
+        <url-pattern>/printDialog.do</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>PrintAuthDialogServlet</servlet-name>
+        <url-pattern>/printAuthDialog.do</url-pattern>
+    </servlet-mapping>
+
+     <servlet-mapping>
+        <servlet-name>PrintResultsServlet</servlet-name>
+        <url-pattern>/printResults.do</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>ExportDialogServlet</servlet-name>
+        <url-pattern>/exportDialog.do</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>ExportAuthDialogServlet</servlet-name>
+        <url-pattern>/exportAuthDialog.do</url-pattern>
+    </servlet-mapping>
+
+
+     <servlet-mapping>
+        <servlet-name>ExportResultsServlet</servlet-name>
+        <url-pattern>/exportRecord.do</url-pattern>
+    </servlet-mapping>
+
+     <servlet-mapping>
+        <servlet-name>SaveSearchAddServlet</servlet-name>
+        <url-pattern>/saveSearchAdd.do</url-pattern>
+    </servlet-mapping>
+
+     <servlet-mapping>
+        <servlet-name>SaveSearchAlertAddServlet</servlet-name>
+        <url-pattern>/saveSearchAlertAdd.do</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>TitlesActionServlet</servlet-name>
+        <url-pattern>/addToList.do</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>TitlesActionServlet</servlet-name>
+        <url-pattern>/delFromList.do</url-pattern>
+    </servlet-mapping>
+
+
+    <servlet-mapping>
+        <servlet-name>TitlesActionServlet</servlet-name>
+        <url-pattern>/titlesUpd/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+      <servlet-name>SessionConfigServlet</servlet-name>
+      <url-pattern>/config</url-pattern>
+    </servlet-mapping>
+
+
+    <!-- Retain Selected Checkboxes for Titles -->
+    <servlet-mapping>
+        <servlet-name>SelectTitlesActionServlet</servlet-name>
+        <url-pattern>/savSelChkBx/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>MyAccountActionServlet</servlet-name>
+        <url-pattern>/myAccountUpd/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>MediaBookingConfServlet</servlet-name>
+        <url-pattern>/mediaBookingConf/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>PatronRequestsServlet</servlet-name>
+        <url-pattern>/patronRequests/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>PatronRequestServlet</servlet-name>
+        <url-pattern>/patronRequest/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>SendPatronRequestAction</servlet-name>
+        <url-pattern>/sendPatronRequest.do</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>CancelAction</servlet-name>
+        <url-pattern>/cancel</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>RenewAction</servlet-name>
+        <url-pattern>/renew</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>EmailAction</servlet-name>
+        <url-pattern>/sendMail.do</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>CorridorSearchServlet</servlet-name>
+        <url-pattern>/corridorSearch</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>PolygonSearchServlet</servlet-name>
+        <url-pattern>/polygonSearch</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>RadiusSearchServlet</servlet-name>
+        <url-pattern>/radiusSearch</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>RangeSearchServlet</servlet-name>
+        <url-pattern>/rangeSearch</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>RectangleSearchServlet</servlet-name>
+        <url-pattern>/rectangleSearch</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>MediaDeliveryLocAction</servlet-name>
+        <url-pattern>/changeMediaDeliveryLoc/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>MediaItemAction</servlet-name>
+        <url-pattern>/changeMediaItem/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>MediaValidateEquipmentAction</servlet-name>
+        <url-pattern>/validateMediaEquipment/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>MediaValidateItemAction</servlet-name>
+        <url-pattern>/validateMediaItem/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>ShortLoanDatesAction</servlet-name>
+        <url-pattern>/getShortLoanDates/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>UBHoldingsLocationAction</servlet-name>
+        <url-pattern>/changeUBHoldingsLib/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>UBPickupLocationAction</servlet-name>
+        <url-pattern>/changeUBPickupLib/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>MySearchesPage</servlet-name>
+        <url-pattern>/mySearch/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>MySearchesFormServlet</servlet-name>
+        <url-pattern>/mySearchFormSubmit.do</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>MyListPageServlet</servlet-name>
+        <url-pattern>/myList/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>DeleteSavedSearchServlet</servlet-name>
+        <url-pattern>/deleteSearch.do</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>CombineSearchesServlet</servlet-name>
+        <url-pattern>/combineSearches.do</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>GetAuthScanDocAction</servlet-name>
+        <url-pattern>/getAuthScanDoc</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>GetLinkResolverActionServlet</servlet-name>
+        <url-pattern>/linkResolver/*</url-pattern>
+    </servlet-mapping>
+
+    <session-config>
+        <!-- Be sure to coordinate changes in this value
+            with the value of timeout.time in all
+            webvoyage.properties files.  The value of
+            timeout.time must be less than the value
+            of session-timeout. -->
+        <session-timeout>15</session-timeout>
+    </session-config>
+
+    <!--  Remember to localize the error page! -->
+    <error-page>
+        <error-code>403</error-code>
+        <location>/error_404.html</location>
+    </error-page>
+    <error-page>
+        <error-code>404</error-code>
+        <location>/error_404.html</location>
+    </error-page>
+    <error-page>
+        <error-code>500</error-code>
+        <location>/error_500.html</location>
+    </error-page>
+    <error-page>
+        <error-code>503</error-code>
+        <location>/error_503.html</location>
+    </error-page>
+
+</web-app>
+
+
+
+
+
+
