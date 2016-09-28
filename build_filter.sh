@@ -21,10 +21,15 @@ if [ ! -d classes ]; then
   mkdir classes
 fi
 
+# Experiment
+SOURCEDIR=src/edu/ucla/library/libservices/tomcat/filters
+# Create another filter - same code except for class name, but will have different config in web.xml
+sed 's/BbidHarvestFilter/GeneralSearchFilter/g' ${SOURCEDIR}/BbidHarvestFilter.java > ${SOURCEDIR}/GeneralSearchFilter.java
+
 $JAVABIN/javac \
   -cp .:${TOMCAT}/lib/servlet-api.jar \
   -d classes \
-  src/edu/ucla/library/libservices/tomcat/filters/BbidHarvestFilter.java
+  ${SOURCEDIR}/*.java
 
 JARFILE=ucla-filters.jar
 TARGET=/m1/voyager/${YOURDB}/tomcat/vwebv/context/vwebv/WEB-INF/lib/$JARFILE
