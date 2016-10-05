@@ -1,6 +1,7 @@
 package edu.ucla.library.libservices.tomcat.filters;
 
-import java.util.ArrayDeque;
+//import java.util.ArrayDeque;
+import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -17,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 
 public class BbidHarvestFilter implements Filter {
   // Map with IP address as key, queue of datetimes requested as value
-  static Map<String, ArrayDeque<Long>> ipAddresses = new HashMap<String, ArrayDeque<Long>>();
+  static Map<String, ConcurrentLinkedDeque<Long>> ipAddresses = new HashMap<String, ConcurrentLinkedDeque<Long>>();
 
   // Map with IP address and number of times banned
   static Map<String, Integer> bannedIpAddresses = new HashMap<String, Integer>();
@@ -77,7 +78,7 @@ public class BbidHarvestFilter implements Filter {
     // There's no general cleanup routine, just IP-specific.
     if (ipAddresses.containsKey(ipAddress)) {
       long expireTime = requestTime - (INTERVAL * SECONDS_TO_MILLIS);
-      ArrayDeque<Long> times = ipAddresses.get(ipAddress);
+      ConcurrentLinkedDeque<Long> times = ipAddresses.get(ipAddress);
       Iterator<Long> iter = times.iterator();
       while (iter.hasNext()) {
 	long time = iter.next();
@@ -117,12 +118,12 @@ public class BbidHarvestFilter implements Filter {
   }
 
   private void addEntry(String ipAddress, long requestTime) {
-    ArrayDeque<Long> times;
+    ConcurrentLinkedDeque<Long> times;
     if (ipAddresses.containsKey(ipAddress)) {
       times = ipAddresses.get(ipAddress);
     }
     else {
-      times = new ArrayDeque<Long>();
+      times = new ConcurrentLinkedDeque<Long>();
     }
     times.addLast(requestTime);
     ipAddresses.put(ipAddress, times);
@@ -137,7 +138,7 @@ public class BbidHarvestFilter implements Filter {
   private long getLatestRequestTime(String ipAddress) {
     long latestRequestTime = 0; 
     if (ipAddresses.containsKey(ipAddress)) {
-      ArrayDeque<Long> times = ipAddresses.get(ipAddress);
+      ConcurrentLinkedDeque<Long> times = ipAddresses.get(ipAddress);
       // Times should be in chrono order in queue
       latestRequestTime = times.getLast();
     }
