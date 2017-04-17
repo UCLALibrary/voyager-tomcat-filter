@@ -59,7 +59,7 @@ public class BbidHarvestFilter implements Filter {
       // TODO: Enable this via init-param in web.xml?
       int count = bannedIpAddresses.get(ipAddress);
       long bannedUntil = getLatestRequestTime(ipAddress);
-      httpResponse.addHeader("X-Banned-IP", ipAddress + "***" + count + "***" + new java.util.Date(bannedUntil));
+      // httpResponse.addHeader("X-Banned-IP", ipAddress + "***" + count + "***" + new java.util.Date(bannedUntil));
       // Testing
 
       // Return HTTP 403, with Ex Libris default page display
