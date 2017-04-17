@@ -1,4 +1,4 @@
-237a238,261
+237a238,285
 >     <!-- 2014-08-12 akohler: Custom UCLA filter to block aggressive record harvesters.
 >      IP addresses requesting more than RequestsAllowed records in TrackingInterval
 >      seconds will be banned (receive HTTP 403) for BanDuration seconds.
@@ -19,15 +19,46 @@
 >         <init-param>
 >             <!-- Amount of time in seconds before now to track previous requests -->
 >             <param-name>TrackingInterval</param-name>
->             <param-value>10</param-value>
+>             <param-value>15</param-value>
 >         </init-param>
 >     </filter>
 > 
-532a557,563
+>     <!-- Custom UCLA filter to block aggressive searching, like frequent canned searches.
+>      Similar to BBID Harvest Filter, but may need longer TrackingInterval - set based
+>      on actual abusive search info from your logs.
+>     -->
+>     <filter>
+>         <filter-name>General Search Filter</filter-name>
+>         <filter-class>edu.ucla.library.libservices.tomcat.filters.GeneralSearchFilter</filter-class>
+>         <init-param>
+>             <!-- Number of requests allowed during TrackingInterval -->
+>             <param-name>RequestsAllowed</param-name>
+>             <param-value>20</param-value>
+>         </init-param>
+>         <init-param>
+>             <!-- Seconds to ban IP addresses which exceed RequestsAllowed -->
+>             <param-name>BanDuration</param-name>
+>             <param-value>60</param-value>
+>         </init-param>
+>         <init-param>
+>             <!-- Amount of time in seconds before now to track previous requests -->
+>             <param-name>TrackingInterval</param-name>
+>             <param-value>60</param-value>
+>         </init-param>
+>     </filter>
+> 
+531a580,593
 >     <!-- 2014-08-12 akohler: Custom UCLA filter to block aggressive record harvesters -->
 >     <filter-mapping>
 >         <filter-name>BBID Harvest Filter</filter-name>
 >         <url-pattern>/holdingsInfo/*</url-pattern>
 >         <url-pattern>/staffView/*</url-pattern>
+>     </filter-mapping>
+> 
+>     <!-- 2016-09-27 akohler: Custom UCLA filter to block aggressive searching -->
+>     <filter-mapping>
+>         <filter-name>General Search Filter</filter-name>
+>         <!-- TODO: Add support for general searches, which look like /search?params -->
+>         <url-pattern>/search</url-pattern>
 >     </filter-mapping>
 > 
