@@ -3,7 +3,7 @@ Provides a filter for the Voyager Tomcat OPAC to defend against aggressive harve
 
 ### Specifications
 * Monitor requests for certain URL patterns used for harvesting (and other, legitimate purposes)
-* If an IP address makes more than the allowed number of requests during a time interval, temporarily ban (reject) that IP address for further such requests for a period.
+* If an IP address makes more than the allowed number of requests during a time interval, temporarily ban (reject) that IP address for further such requests for a period.  For example:
   * Number of requests: 20
   * Interval: 10 seconds
   * Duration of ban: 60 seconds
@@ -54,6 +54,8 @@ It has a corresponding `<filter-mapping>` element, also the first in its chain:
     <url-pattern>/staffView/*</url-pattern>
 </filter-mapping>
 ```
+
+There is also a `General Search Filter` which is similar to the `BBID Harvest Filter`, except that it looks at search requests.  It's configured in the same way.  See `web.xml.diff`.
 
 ### Enabling / disabling
 The filter code gets its parameters from `web.xml`, so code and config must be kept in sync.  If the code or config is changed, Tomcat must be restarted for the changes to take effect.
