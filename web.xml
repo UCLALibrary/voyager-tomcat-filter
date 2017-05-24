@@ -269,7 +269,7 @@
         <init-param>
             <!-- Number of requests allowed during TrackingInterval -->
             <param-name>RequestsAllowed</param-name>
-            <param-value>20</param-value>
+            <param-value>40</param-value>
         </init-param>
         <init-param>
             <!-- Seconds to ban IP addresses which exceed RequestsAllowed -->
